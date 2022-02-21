@@ -38,9 +38,20 @@ public class Predict {
 	 */
 	public static void main(String[] args) {
 		int find = 0;
+
+		for (int i = 0; i <= 36; i++) {
+			List<Integer> analysisData = getAnalysisData(i);
+			LinkedHashMap<Object, Long> result = groupAndSort(analysisData);
+			System.out.println(i + ":: " + result);
+		}
+		//LinkedHashMap<Object, Long> sortedAfter = groupNumbers(after);
+		//System.out.println("Analysis After List:"+ sortedAfter);
+		
+	}
+
+	private static List<Integer> getAnalysisData(int find) {
 		List<Integer> before = new ArrayList<Integer>();
 		List<Integer> after = new ArrayList<Integer>();
-		System.out.println(sequences);
 		List<Integer> indexes = getIndexes(find);
 		for (Integer index : indexes) {
 			if (index + 1 < sequences.size()) {
@@ -51,14 +62,7 @@ public class Predict {
 				//after.add(sequences.get(index - 1));
 			}
 		}
-
-		System.out.println();
-		LinkedHashMap<Object, Long> sortedBefore = groupAndSort(before);
-		System.out.println("Analysis List:"+ sortedBefore);
-
-		//LinkedHashMap<Object, Long> sortedAfter = groupNumbers(after);
-		//System.out.println("Analysis After List:"+ sortedAfter);
-		
+		return before;
 	}
 
 	private static LinkedHashMap<Object, Long> groupAndSort(List<Integer> list) {
