@@ -1,28 +1,30 @@
+<!DOCTYPE html>
 <html>
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script src="jquery-3.6.0.min.js"></script>
 	<script src="Pattern.js" type="text/javascript"></script>
 	<style>
+	table{
+		width: 100%;
+	}
 	</style>
 </head>
 
-<body style="font-family:Verdana, sans-serif;font-weight: 100;font-size: 12;position:relative">
-	<!--Click the Button &nbsp;
-	<input type="button" onclick="showSpinAnalysis()" value="Show Pattern" />
-	<br/>-->
-	<div id="slots"> </div><p>
-	<!--<input type="text" id="spinBox" size="2" /> <input type="button" onclick="addToOngoingSpin()" value="Add" />-->
+<body style="font-family:Verdana, sans-serif;font-weight: 100;font-size: 12;" onreload="checkReload();">
+<center>
+	<div id="slots" width="100%" > </div><p>
 	<div id="currSpin"></div>
 	<p>
-</body>
 <p>
 <div id="patternFlow"></div>
 <p>
 <p>
 <div id="next"></div>
-
+<input type="button" value="Clear" onclick="checkReload()"></input>
 <script type="text/javascript">
 showSlots();
 </script>
+</center>
+</body>
 </html>
