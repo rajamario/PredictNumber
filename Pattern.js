@@ -173,7 +173,7 @@ function getPositions(start, end) {
 		moves = 38 - moves;
 	}
 	//temp-flipflow
-	if (!($('#fs').is(":checked")) && moves > 9) {
+	if ($('#fs').is(":checked") && moves > 9) {
 		moves = 19 - moves;
 	}
 

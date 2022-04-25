@@ -85,13 +85,13 @@ input[type="button"]{
   box-sizing: border-box;
 }
 .flipswitch-inner:before {
-  content: "Full";
+  content: "Half";
   padding-right: 12px;
   background-color: #A86707;
   color: #FFFFFF;
 }
 .flipswitch-inner:after {
-  content: "Half";
+  content: "Full";
   padding-right: 14px;
   background-color: #EBEBEB;
   color: #888888;
