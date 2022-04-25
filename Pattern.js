@@ -47,7 +47,7 @@ function showSpin() {
 
 	val.reverse().forEach(function(v) {
 		row+=1;
-		print += "<td class=\"spinHistory";
+		print += "<td align=\"center\" class=\"spinHistory";
 		if (red.indexOf(parseInt(v)) != -1) {
 			print += " redButton \">";
 		} else if (black.indexOf(parseInt(v)) != -1) {
