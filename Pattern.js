@@ -12,53 +12,98 @@ db.push(ongoingSpins);
 function showSlots() {
 	var slot = "<table style=\"position:relative;\"><tr>";
 	for (var i = 1; i <= 36; i++) {
-		slot += "<td align=\"center\"><input type=\"button\" style=\"width:50px;height:30px\" onclick=\"addToOngoingSpin(this)\" value=\"" + i + "\" \/><\/td>";
+		slot += "<td align=\"center\"><input type=\"button\" onclick=\"addToOngoingSpin(this)\" value=\"" + i + "\" \/><\/td>";
 		if (i % 6 == 0) {
 			slot+= "<\/tr><tr>";
 		}
 	}
-	slot += "<tr><td colspan=\"3\" align=\"right\"><input type=\"button\" style=\"width:50px;height:30px\" onclick=\"addToOngoingSpin(this)\" value=\"0\" \/><\/td>";
-	slot += "<td colspan=\"3\" \"left\"><input type=\"button\" style=\"width:50px;height:30px\" onclick=\"addToOngoingSpin(this)\" value=\"88\" \/><\/td><\/tr>";
+	slot += "<tr><td colspan=\"3\" align=\"right\"><input type=\"button\" onclick=\"addToOngoingSpin(this)\" value=\"0\" \/><\/td>";
+	slot += "<td colspan=\"3\" \"left\"><input type=\"button\" onclick=\"addToOngoingSpin(this)\" value=\"88\" \/><\/td><\/tr>";
 	slot += "<\/tr><\/table>";
 	$("#slots").html(slot);
+	applyColor();
+}
+
+function applyColor(){
+	$.each($('input[type=button]'),function(){
+		if (red.indexOf(parseInt($(this).val())) != -1) {
+			$(this).addClass('redButton');
+		} else if (black.indexOf(parseInt($(this).val())) != -1) {
+			$(this).addClass('blackButton');
+		} else {
+			$(this).addClass('greenButton');
+		}
+		console.log();
+	})
 }
 
 function showSpin() {
 	var val = [];
-	var print="";
+	var print="<table><tr>";
+	var row=0;
 	ongoingSpins.forEach(function(v) {
 		val.push(v);
 	});
 
 	val.reverse().forEach(function(v) {
-		if (print.length != 0) {
-			print += " - ";
+		row+=1;
+		print += "<td class=\"spinHistory";
+		if (red.indexOf(parseInt(v)) != -1) {
+			print += " redButton \">";
+		} else if (black.indexOf(parseInt(v)) != -1) {
+			print += " blackButton \">";
+		} else {
+			print += " greenButton \">";
+		} 
+		print += v + "<\/td>"
+		if (row % 14 == 0) {
+			print += "<\/tr><tr>";
 		}
-		print += v;
+		//print += v;
 	});
+	print += "<\/tr><\/table>";
 	
-	$("#currSpin").html("Ongoing Spins: " + print);
+	$("#currSpin").html("<h5>Ongoing Spins:&nbsp;<\/h5>" + print);
 }
 
 function addToOngoingSpin(obj) {
-	//if ($("#spinBox").val()) {
 	if ($(obj).val()) {
-		//ongoingSpins.push(parseInt($("#spinBox").val()));
 		ongoingSpins.push(parseInt($(obj).val()));
-		//$("#spinBox").val("");
 		db.pop();
 		db.push(ongoingSpins);
 		showSpinAnalysis();
+		applyColor();
 	}
 }
 
 function planNextMove(obj){
 	var formation = formRollingSequence(ongoingSpins[ongoingSpins.length-1]);
 	var nextPositions = locateSlots(formation, parseInt(obj.value));
-	$("#next").html(formatForDisplay(nextPositions.sort()));
+	var row = 0;
+	var print="<table><tr>";
+	//nextPositions = nextPositions.sort();
+	nextPositions.forEach(function(v) {
+		row+=1;
+		print += "<td class=\"spinHistory";
+		if (red.indexOf(parseInt(v)) != -1) {
+			print += " redButton \">";
+		} else if (black.indexOf(parseInt(v)) != -1) {
+			print += " blackButton \">";
+		} else {
+			print += " greenButton \">";
+		} 
+		print += v + "<\/td>"
+		if (row % 12 == 0) {
+			print += "<\/tr><tr>";
+		}
+		//print += v;
+	});
+	print += "<\/tr><\/table>";
+	$("#next").html("<h5>Possible Next:&nbsp;<\/h5>"+ print);
 }
 
 function formatForDisplay(array){
+	//not used now
 	var print = "";
 	if (array) {
 		array.forEach(function(v) {
@@ -86,14 +131,20 @@ function showSpinAnalysis() {
 		}
 		//print+="\n<br>";
 	});
-	var patternButton ="";
+	var patternButton ="<table><tr>";
+	var row=0;
 	moved.forEach(function(v) {
-		patternButton += "<input type=\"button\" style=\"width:50px\" onclick=\"planNextMove(this)\" value=\""+ v +"\" \/>&nbsp;&nbsp;";
+		patternButton += "<td><input type=\"button\" class=\"patternButton\" onclick=\"planNextMove(this)\" value=\""+ v +"\" \/></td>";
+		row += 1;
+		if (row % 6 == 0) {
+			patternButton += "<\/tr><tr>";
+		}
 		print += v + " - ";
 	});
-	console.log(print);
+	patternButton += "<\/tr><\/table>";
+	//console.log(print);
 	if (patternButton.length > 0) {
-		$("#patternFlow").html("Pattern: " + patternButton);
+		$("#patternFlow").html("<h5>Pattern:&nbsp;<\/h5>" + patternButton);
 	} else {
 		$("#patternFlow").html("Need more Spins to identify pattern....");
 	}
