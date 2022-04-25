@@ -12,13 +12,13 @@ db.push(ongoingSpins);
 function showSlots() {
 	var slot = "<table style=\"position:relative;\"><tr>";
 	for (var i = 1; i <= 36; i++) {
-		slot += "<td align=\"center\"><input type=\"button\" style=\"width:50px\" onclick=\"addToOngoingSpin(this)\" value=\"" + i + "\" \/><\/td>";
+		slot += "<td align=\"center\"><input type=\"button\" style=\"width:50px;height:30px\" onclick=\"addToOngoingSpin(this)\" value=\"" + i + "\" \/><\/td>";
 		if (i % 6 == 0) {
 			slot+= "<\/tr><tr>";
 		}
 	}
-	slot += "<tr><td colspan=\"3\" align=\"right\"><input type=\"button\" style=\"width:50px\" onclick=\"addToOngoingSpin(this)\" value=\"0\" \/><\/td>";
-	slot += "<td colspan=\"3\" \"left\"><input type=\"button\" style=\"width:50px\" onclick=\"addToOngoingSpin(this)\" value=\"88\" \/><\/td><\/tr>";
+	slot += "<tr><td colspan=\"3\" align=\"right\"><input type=\"button\" style=\"width:50px;height:30px\" onclick=\"addToOngoingSpin(this)\" value=\"0\" \/><\/td>";
+	slot += "<td colspan=\"3\" \"left\"><input type=\"button\" style=\"width:50px;height:30px\" onclick=\"addToOngoingSpin(this)\" value=\"88\" \/><\/td><\/tr>";
 	slot += "<\/tr><\/table>";
 	$("#slots").html(slot);
 }
@@ -160,5 +160,7 @@ function locateSlots(formation, moves) {
 function checkReload(){
 	if(confirm("Spin Details will be lost. Do you want to refresh ??")){
 		window.location.reload();
+	} else {
+		return '';
 	}	
 }

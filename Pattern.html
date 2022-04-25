@@ -11,7 +11,7 @@
 	</style>
 </head>
 
-<body style="font-family:Verdana, sans-serif;font-weight: 100;font-size: 12;" onreload="checkReload();">
+<body style="font-family:Verdana, sans-serif;font-weight: 100;font-size: 12;">
 <center>
 	<div id="slots" width="100%" > </div><p>
 	<div id="currSpin"></div>
@@ -24,6 +24,7 @@
 <input type="button" value="Clear" onclick="checkReload()"></input>
 <script type="text/javascript">
 showSlots();
+window.onbeforeunload=checkReload;
 </script>
 </center>
 </body>
