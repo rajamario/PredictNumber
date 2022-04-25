@@ -49,7 +49,7 @@ function showSpin() {
 		row+=1;
 		print += "<td align=\"center\" class=\"spinHistory";
 		if (red.indexOf(parseInt(v)) != -1) {
-			print += " redButton \">";
+			print += " redButton\">";
 		} else if (black.indexOf(parseInt(v)) != -1) {
 			print += " blackButton \">";
 		} else {
