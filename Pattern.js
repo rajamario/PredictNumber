@@ -172,6 +172,11 @@ function getPositions(start, end) {
 	if (moves >= 19) {
 		moves = 38 - moves;
 	}
+	//temp-flipflow
+	if (!($('#fs').is(":checked")) && moves > 9) {
+		moves = 19 - moves;
+	}
+
 	//console.log("moves:"+ moves);
 	return moves;
 }
@@ -198,6 +203,7 @@ function locateSlots(formation, moves) {
 	var positions = [];
 	//positions.add(formation.get(0));
 	for (var i = 1; i <= 38; i++) {
+		//if (i == moves || i == (19 - moves) || i == (19 + moves) || i == (38 - moves)) {
 		if (i == moves || i == (19 - moves) || i == (19 + moves) || i == (38 - moves)) {
 			if (i < 38) {
 				positions.push(formation[i]);

@@ -52,3 +52,65 @@ input[type="button"]{
 	border: 1px solid #3b3c36;
 }
 
+
+.flipswitch {
+  position: relative;
+  width: 65px;
+}
+.flipswitch input[type=checkbox] {
+  display: none;
+}
+.flipswitch-label {
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  border: 0px solid #999999;
+  border-radius: 47px;
+}
+.flipswitch-inner {
+  width: 200%;
+  margin-left: -100%;
+  transition: margin 0.3s ease-in 0s;
+}
+.flipswitch-inner:before, .flipswitch-inner:after {
+  float: left;
+  width: 50%;
+  height: 20px;
+  padding: 0;
+  line-height: 20px;
+  font-size: 11px;
+  color: white;
+  font-family: Tahoma, Verdana, sans-serif;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+.flipswitch-inner:before {
+  content: "Full";
+  padding-right: 12px;
+  background-color: #A86707;
+  color: #FFFFFF;
+}
+.flipswitch-inner:after {
+  content: "Half";
+  padding-right: 14px;
+  background-color: #EBEBEB;
+  color: #888888;
+  text-align: right;
+}
+.flipswitch-switch {
+  width: 20px;
+  background: #FFFFFF;
+  border: 1px solid #999999;
+  border-radius: 47px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 42px;
+  transition: all 0.3s ease-in 0s;
+}
+.flipswitch-cb:checked + .flipswitch-label .flipswitch-inner {
+  margin-left: 0;
+}
+.flipswitch-cb:checked + .flipswitch-label .flipswitch-switch {
+  right: 0;
+}
