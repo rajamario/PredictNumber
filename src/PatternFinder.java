@@ -112,6 +112,9 @@ public class PatternFinder {
 		if (moves >= 19) {
 			moves = 38 - moves;
 		}
+		if(moves > 9 ) {
+			moves = 19-moves;
+		}
 		return moves;
 	}
 

@@ -10,6 +10,11 @@ input[type="button"]{
 	cursor:pointer;
 }
 
+h5{
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
 .redButton{
 	background: #aa381e;
 	box-shadow: #aa381e 0 2px 2px -5px;
@@ -19,32 +24,32 @@ input[type="button"]{
   	-webkit-user-select: none;
   	touch-action: manipulation;
 	color:white;
-	border:0;
+	border:1px solid #aa381e;
 }
 
 .blackButton{
 	background-color: #3b3c36;
 	color:white;
-	border:thin;
+	border:1px solid #3b3c36;
 }
 
 .greenButton{
 	background-color: #00a877;
 	color:white;
-	border:thin;
+	border:1px solid #00a877;
 }
 
 .patternButton{
 	background-color: #d3d3d3;
 	color:black;
-	border:thin;
+	border:1px solid #d3d3d3;
 	width:30px;
 }
 
 .clear{
 	background-color: #8b8589;
 	color:white;
-	border:thin;
+	border:1px solid #8b8589;
 	width:30px;
 }
 
@@ -52,6 +57,13 @@ input[type="button"]{
 	border: 1px solid #3b3c36;
 }
 
+.specialSeq{
+	border: 2px solid #fcff82;
+}
+
+.undo{
+	cursor:pointer;
+}
 
 .flipswitch {
   position: relative;

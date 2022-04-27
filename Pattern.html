@@ -1,35 +1,50 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script src="jquery-3.6.0.min.js"></script>
 	<script src="Pattern.js" type="text/javascript"></script>
-	<link rel="stylesheet" href="Pattern.css"></link>
+	<link rel="stylesheet" href="Pattern.css">
+	</link>
 </head>
 
 <body>
-<center>
-	<div id="slots" width="100%" > </div><p>
-	<div id="currSpin"></div>
-	<p>
-<p>
-<div id="patternFlow"></div>
-<p>
-<p>
-<div id="next"></div><p>
-<input type="button" value="Clear" class="clear" onclick="checkReload()"></input>
-<script type="text/javascript">
-showSlots();
-window.onbeforeunload=checkReload;
-</script>
-<div><img src="./wheel.jpg" height="220px" width:"220px"/><p/><p/>
-<div class="flipswitch">
-    <input type="checkbox" name="flipswitch" class="flipswitch-cb" id="fs" checked="checked" />
-    <label class="flipswitch-label" for="fs">
-        <div class="flipswitch-inner"></div>
-        <div class="flipswitch-switch"></div>
-    </label>
-</div>
-</center>
+	<center>
+		<h5>Pad</h5>
+		<div id="slots" width="100%"> </div>
+		<p />
+		<div id="next" style=height:10%;></div>
+		<p />
+		<div id="patternFlow" style=height:10%;></div>
+		<p />
+		<hr/>
+		<div id="currSpin" style=height:10%;></div>
+		<p />
+		<script type="text/javascript">
+			init();
+			window.onbeforeunload = checkReload;
+		</script>
+		<div>
+			<table border="0">
+				<tr><td colspan="2" style="padding-top:20px;">
+						<div><img src="./wheel.jpg" height="220px" width:"220px" /></div>
+					</td>
+				</tr>
+				<tr><td></td></tr>
+				<tr>
+					<td align="right"><input type="button" value="Clear" class="clear" onclick="checkReload()"></input></td>
+					<td align="center">
+						<div class="flipswitch">
+							<input type="checkbox" name="flipswitch" class="flipswitch-cb" id="fs" checked="checked" />
+							<label class="flipswitch-label" for="fs">
+								<div class="flipswitch-inner"></div>
+								<div class="flipswitch-switch"></div>
+							</label>
+						</div>
+					</td></tr>
+			</table>
+	</center>
 </body>
+
 </html>
