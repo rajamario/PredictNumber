@@ -4,6 +4,7 @@ var red = new Array(1, 3, 36, 34, 5, 32, 7, 30, 9, 14, 23, 16, 21, 18, 19, 12, 2
 var black = new Array(2, 35, 4, 33, 6, 31, 8, 29, 10, 13, 24, 15, 22, 17, 20, 11, 26, 28);
 var seqMap = new Map();
 var posList = new Array();
+var lastSpin = new Array();
 var db = [
 	//new Array(16, 10, 28, 3, 6, 35, 16, 7, 16, 35, 25, 11, 2, 88, 30, 3, 26, 15, 12, 13, 16, 14, 34),
 	//new Array(6, 88, 19, 24, 26, 34, 2, 6, 32, 20, 31, 8, 33, 34, 29, 6, 5, 34, 19, 1, 20, 12, 30)
@@ -106,6 +107,24 @@ function planNextMove(obj,spl) {
 		}
 		//print += v;
 	});
+	
+	print += "<\/td><td>&nbsp;&nbsp;&nbsp;<\/td>";
+	
+//	if (!obj) {
+	lastSpin = lastSpin.sort(function(a, b) { return a - b });
+	lastSpin.forEach(function(v) {
+		print += "<td class=\"";
+		if (red.indexOf(parseInt(v)) != -1) {
+			print += "redButton\">";
+		} else if (black.indexOf(parseInt(v)) != -1) {
+			print += "blackButton\">";
+		} else {
+			print += "greenButton\">";
+		}
+		print += v + "<\/td>"
+	});
+	//}
+	
 	print += "<\/tr><\/table>";
 	$("#next").html("<h5>Possible Next:&nbsp;<\/h5>" + print);
 }
@@ -265,10 +284,15 @@ function formRollingSequence(startNum) {
 
 function locateNextSlots(formation, moves) {
 	var positions = [];
-	positions.push(formation[0]);
+	lastSpin = [];
+	//positions.push(formation[0]);
+	lastSpin.push(parseInt(formation[0]));
 	for (var i = 1; i <= 38; i++) {
 		//if (i == moves || i == (19 - moves) || i == (19 + moves) || i == (38 - moves)) {
-		if (i == moves || i == 19 || i == (19 - moves) || i == (19 + moves) || i == (38 - moves)) {
+		if (i == 19) {
+			lastSpin.push(parseInt(formation[i]));
+		}
+		if (i == moves || i == (19 - moves) || i == (19 + moves) || i == (38 - moves)) {
 			if (i < 38) {
 				positions.push(parseInt(formation[i]));
 			}
