@@ -79,18 +79,18 @@ function addToOngoingSpin(obj) {
 		showSpinAnalysis();
 		applyColor();
 		$(".undo").show();
-		planNextMove(); 
+		planNextMove();
 		getSpecialSequence();
 	}
 }
 
-function planNextMove(obj,spl) {
+function planNextMove(obj, spl) {
 	var lastMove = spl || posList[0];
 	var formation = formRollingSequence(ongoingSpins[ongoingSpins.length - 1]);
 	var nextPositions = locateNextSlots(formation, obj ? parseInt(obj.value) : parseInt(lastMove));
 	var row = 0;
 	var print = "<table><tr>";
-	nextPositions = nextPositions.sort(function(a, b){return a-b});
+	//nextPositions = nextPositions.sort(function(a, b){return a-b});
 	nextPositions.forEach(function(v) {
 		row += 1;
 		print += "<td class=\"";
@@ -107,10 +107,10 @@ function planNextMove(obj,spl) {
 		}
 		//print += v;
 	});
-	
+
 	print += "<\/td><td>&nbsp;&nbsp;&nbsp;<\/td>";
-	
-//	if (!obj) {
+
+	//	if (!obj) {
 	lastSpin = lastSpin.sort(function(a, b) { return a - b });
 	lastSpin.forEach(function(v) {
 		print += "<td class=\"";
@@ -124,7 +124,7 @@ function planNextMove(obj,spl) {
 		print += v + "<\/td>"
 	});
 	//}
-	
+
 	print += "<\/tr><\/table>";
 	$("#next").html("<h5>Possible Next:&nbsp;<\/h5>" + print);
 }
@@ -160,8 +160,12 @@ function getSpecialSequence() {
 		$.each($('.patternButton'), function() {
 			var i = parseInt($(this).attr("index"));
 			//console.log('Attri:'+$('.patternButton[index='+(i+1)+']').val());
-			if (parseInt($(this).val()) == k && parseInt($('.patternButton[index='+(i+1)+']').val()) == lastMove) {
+			if (parseInt($(this).val()) == k && parseInt($('.patternButton[index=' + (i + 1) + ']').val()) == lastMove) {
+				var superMatch = confirmSequence(k, posList[0], posList[1]);
 				$(this).addClass('specialSeq');
+				if (superMatch) {
+					$(this).addClass('confirmSeq');
+				}
 			}
 		});
 	});
@@ -172,7 +176,7 @@ function showSpinAnalysis() {
 	showSpin();
 	var print = "";
 	var moved = [];
-	posList=[];
+	posList = [];
 	db.forEach(function(list) {
 		//console.log("list: "+ list);
 		for (var i = list.length - 1; i > 0; i--) {
@@ -190,7 +194,7 @@ function showSpinAnalysis() {
 	var index = -1;
 	moved.forEach(function(v) {
 		index++;
-		patternButton += "<td><input type=\"button\" class=\"patternButton\" index=\""+ index +"\" onclick=\"planNextMove(this)\" value=\"" + v + "\" \/></td>";
+		patternButton += "<td><input type=\"button\" class=\"patternButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + v + "\" \/></td>";
 		row += 1;
 		if (row % 6 == 0) {
 			patternButton += "<\/tr><tr>";
@@ -205,6 +209,37 @@ function showSpinAnalysis() {
 		$("#patternFlow").html("Need more Spins to identify pattern....");
 	}
 }
+
+function confirmSequence(f, s, t) {
+	console.log("f:" + f + " s:" + s + " t:" + t);
+	var found = false;
+	var i = 0;
+	if (f === undefined || s === undefined || t === undefined) {
+		return found;
+	}
+
+	if (posList) {
+		var diff = -1;
+		for (var i = 3; i < posList.length; i++) {
+			if (posList[i + 1] !== undefined && (posList[i] == parseInt(f) && posList[i + 1] == parseInt(s))) {
+				console.log("v:" + posList[i] + " i:" + i + " posList[i + 1]:" + posList[i + 1] + " posList[i + 2]" + posList[i + 2]);
+				if (posList[i + 2] !== undefined && diff == -1) {
+					if (parseInt(t) >= posList[i + 2]) {
+						diff = parseInt(t) - posList[i + 2];
+					} else {
+						diff = posList[i + 2] - parseInt(t);
+					}
+
+					if (diff == 0 || diff == 1) {
+						found = true;
+					}
+				}
+			}
+		};
+	}
+	return found;
+}
+
 
 function saveSequence() {
 	if (seqMap && seqMap.size > 0) {
