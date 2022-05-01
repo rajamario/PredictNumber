@@ -5,7 +5,7 @@ body{
 }
 
 input[type="button"]{
-	width:50px;
+	width:45px;
 	height:20px;
 	cursor:pointer;
 }

@@ -90,7 +90,7 @@ function planNextMove(obj, spl) {
 	var nextPositions = locateNextSlots(formation, obj ? parseInt(obj.value) : parseInt(lastMove));
 	var row = 0;
 	var print = "<table><tr>";
-	//nextPositions = nextPositions.sort(function(a, b){return a-b});
+	nextPositions = nextPositions.sort(function(a, b){return a-b});
 	nextPositions.forEach(function(v) {
 		row += 1;
 		print += "<td class=\"";
@@ -229,25 +229,59 @@ function showSpinAnalysis() {
 			var s = parseInt(posList[1]);
 			var disNum = 0;
 			//+1
-			disNum = ((f + 1) % 9);
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"+1&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"+1&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"1\" \/></td>";
 			//+2
-			disNum = ((f + 2) % 9);
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"+2&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"+2&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"2\" \/></td>";
+			//pos -1
+			disNum = ((f + 1) % 10);
+			indexforCalc++;
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"p1&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
+			//pos -2
+			disNum = ((f + 2) % 10);
+			indexforCalc++;
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"p2&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
+			//pos -1 
+			if (f > 1) {
+				disNum = ((f - 1) % 10);
+				indexforCalc++;
+				patternCalc += "<td>" + "<font class=\"superScript\">" + "-p1&nbsp;" + "<\/font>" + "<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			}
+			if (parseInt(indexforCalc) % 4 == 0) {
+				patternCalc += "<\/tr><tr>";
+			}
+			//pos -2
+			if (f > 2) {
+				disNum = ((f - 2) % 10);
+				indexforCalc++;
+				patternCalc += "<td>" + "<font class=\"superScript\">" + "-p2&nbsp;" + "<\/font>" + "<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			}
+			if (parseInt(indexforCalc) % 4 == 0) {
+				patternCalc += "<\/tr><tr>";
+			}
+			
 			//subtract
 			if (f > s) {
-				disNum = ((f - s) % 9);
+				disNum = ((f - s) % 10);
 			} else {
-				disNum = ((s - f) % 9);
+				disNum = ((s - f) % 10);
 			}
 			indexforCalc++;
 			patternCalc += "<td>"+"<font class=\"superScript\">"+"Sub&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			if (parseInt(indexforCalc) % 4 == 0) {
+				patternCalc += "<\/tr><tr>";
+			}
+			if (parseInt(indexforCalc) % 4 == 0) {
+				patternCalc += "<\/tr><tr>";
+			}
 			//add
-			disNum = ((f + s) % 9);
+			disNum = ((f + s) % 10);
 			indexforCalc++;
 			patternCalc += "<td>"+"<font class=\"superScript\">"+"Add&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			if (parseInt(indexforCalc) % 4 == 0) {
+				patternCalc += "<\/tr><tr>";
+			}
 			//Half
 			if (f % 2 == 0) {
 				disNum = ((f / 2));
