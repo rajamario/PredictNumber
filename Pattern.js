@@ -188,14 +188,25 @@ function showSpinAnalysis() {
 		}
 		//print+="\n<br>";
 	});
+
 	saveSequence();
+
 	var patternButton = "<table><tr>";
 	var row = 0;
 	var index = -1;
+	var spinIndex = ongoingSpins.length - 1 || -1;
 	moved.forEach(function(v) {
 		index++;
-		patternButton += "<td><input type=\"button\" class=\"patternButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + v + "\" \/></td>";
+		patternButton += "<td>" + "<font class=\"superScript\">" + ongoingSpins[spinIndex] + "<\/font>" + "<input type=\"button\" class=\"patternButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + v + "\" \/>";
+		/*
+		if (index == posList.length-1) {
+			patternButton += "<font class=\"superScript\">"+ ongoingSpins[0] + "<\/font>";
+		}
+		*/
+		patternButton += "</td>";
+		
 		row += 1;
+		spinIndex--;
 		if (row % 6 == 0) {
 			patternButton += "<\/tr><tr>";
 		}
@@ -208,6 +219,47 @@ function showSpinAnalysis() {
 	} else {
 		$("#patternFlow").html("Need more Spins to identify pattern....");
 	}
+
+	//Display calculated buttons
+	var patternCalc = "<table><tr>";
+	var indexforCalc = -1;
+	if (posList.length > 1) {
+		if (posList[0] != undefined && posList[1] != undefined) {
+			var f = parseInt(posList[0]);
+			var s = parseInt(posList[1]);
+			var disNum = 0;
+			//+1
+			disNum = ((f + 1) % 9);
+			indexforCalc++;
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"+1&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			//+2
+			disNum = ((f + 2) % 9);
+			indexforCalc++;
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"+2&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			//subtract
+			if (f > s) {
+				disNum = ((f - s) % 9);
+			} else {
+				disNum = ((s - f) % 9);
+			}
+			indexforCalc++;
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"Sub&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			//add
+			disNum = ((f + s) % 9);
+			indexforCalc++;
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"Add&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			//Half
+			if (f % 2 == 0) {
+				disNum = ((f % 2) % 9);
+				indexforCalc++;
+				patternCalc += "<td>"+"<font class=\"superScript\">"+"Half&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			}
+			//duplicate
+		}
+		patternCalc += "<\/tr><\/table>";
+		$("#patternCalc").html("<h5>Possible Calc:&nbsp;<\/h5>" + patternCalc);
+	}	
+	
 }
 
 function confirmSequence(f, s, t) {
