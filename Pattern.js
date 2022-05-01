@@ -250,7 +250,7 @@ function showSpinAnalysis() {
 			patternCalc += "<td>"+"<font class=\"superScript\">"+"Add&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			//Half
 			if (f % 2 == 0) {
-				disNum = ((f - f) % 9);
+				disNum = ((f / 2) % 9);
 				indexforCalc++;
 				patternCalc += "<td>"+"<font class=\"superScript\">"+"Half&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			}
