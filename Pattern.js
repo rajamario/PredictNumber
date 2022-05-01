@@ -285,6 +285,13 @@ function showSpinAnalysis() {
 				indexforCalc++;
 				patternCalc += "<td>"+"<font class=\"superScript\">"+"&frac12;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			}
+			//Double
+			if (f < 6) {
+				disNum = ((f * 2) % 10);
+				indexforCalc++;
+				patternCalc += "<td>"+"<font class=\"superScript\">"+"*2"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			}
+
 			//duplicate
 		}
 		patternCalc += "<\/tr><\/table>";
