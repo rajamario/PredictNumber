@@ -227,23 +227,23 @@ function showSpinAnalysis() {
 			var disNum = 0;
 			//+1
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"+1"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"1\" \/></td>";
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"1p"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"1\" \/></td>";
 			//+2
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"+2"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"2\" \/></td>";
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"2p"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"2\" \/></td>";
 			//pos -1
 			disNum = ((f + 1) % 10);
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"+p1"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"&uarr;1"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
 			//pos -2
 			disNum = ((f + 2) % 10);
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"+p2"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"&uarr;2"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
 			//pos -1 
 			if (f > 1) {
 				disNum = ((f - 1) % 10);
 				indexforCalc++;
-				patternCalc += "<td>" + "<font class=\"superScript\">" + "-p1" + "<\/font>" + "<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+				patternCalc += "<td>" + "<font class=\"superScript\">" + "&darr;1" + "<\/font>" + "<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			}
 			if (parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
@@ -252,7 +252,7 @@ function showSpinAnalysis() {
 			if (f > 2) {
 				disNum = ((f - 2) % 10);
 				indexforCalc++;
-				patternCalc += "<td>" + "<font class=\"superScript\">" + "-p2" + "<\/font>" + "<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+				patternCalc += "<td>" + "<font class=\"superScript\">" + "&darr;2" + "<\/font>" + "<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			}
 			if (parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
@@ -265,7 +265,7 @@ function showSpinAnalysis() {
 				disNum = ((s - f) % 10);
 			}
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"Diff"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"&Delta;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			if (parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
@@ -275,7 +275,7 @@ function showSpinAnalysis() {
 			//add
 			disNum = ((f + s) % 10);
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"Sum"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"&sum;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			if (parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
@@ -283,7 +283,7 @@ function showSpinAnalysis() {
 			if (f % 2 == 0) {
 				disNum = ((f / 2));
 				indexforCalc++;
-				patternCalc += "<td>"+"<font class=\"superScript\">"+"Half"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+				patternCalc += "<td>"+"<font class=\"superScript\">"+"&frac12;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			}
 			//duplicate
 		}
