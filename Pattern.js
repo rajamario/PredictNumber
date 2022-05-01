@@ -38,7 +38,6 @@ function applyColor() {
 		} else {
 			$(this).addClass('greenButton');
 		}
-		console.log();
 	})
 }
 
@@ -152,8 +151,6 @@ function getSpecialSequence() {
 				result.set(k, v);
 			}
 		});
-		console.log("Spl. Seq..");
-		console.log(result);
 	}
 
 	result.forEach(function(v, k) {
@@ -230,23 +227,23 @@ function showSpinAnalysis() {
 			var disNum = 0;
 			//+1
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"+1&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"1\" \/></td>";
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"+1"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"1\" \/></td>";
 			//+2
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"+2&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"2\" \/></td>";
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"+2"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"2\" \/></td>";
 			//pos -1
 			disNum = ((f + 1) % 10);
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"+p1&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"+p1"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
 			//pos -2
 			disNum = ((f + 2) % 10);
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"+p2&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"+p2"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
 			//pos -1 
 			if (f > 1) {
 				disNum = ((f - 1) % 10);
 				indexforCalc++;
-				patternCalc += "<td>" + "<font class=\"superScript\">" + "-p1&nbsp;" + "<\/font>" + "<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+				patternCalc += "<td>" + "<font class=\"superScript\">" + "-p1" + "<\/font>" + "<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			}
 			if (parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
@@ -255,7 +252,7 @@ function showSpinAnalysis() {
 			if (f > 2) {
 				disNum = ((f - 2) % 10);
 				indexforCalc++;
-				patternCalc += "<td>" + "<font class=\"superScript\">" + "-p2&nbsp;" + "<\/font>" + "<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+				patternCalc += "<td>" + "<font class=\"superScript\">" + "-p2" + "<\/font>" + "<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			}
 			if (parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
@@ -268,7 +265,7 @@ function showSpinAnalysis() {
 				disNum = ((s - f) % 10);
 			}
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"Sub&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"Diff"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			if (parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
@@ -278,7 +275,7 @@ function showSpinAnalysis() {
 			//add
 			disNum = ((f + s) % 10);
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"Add&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"Sum"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			if (parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
@@ -286,7 +283,7 @@ function showSpinAnalysis() {
 			if (f % 2 == 0) {
 				disNum = ((f / 2));
 				indexforCalc++;
-				patternCalc += "<td>"+"<font class=\"superScript\">"+"Half&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+				patternCalc += "<td>"+"<font class=\"superScript\">"+"Half"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			}
 			//duplicate
 		}
@@ -297,7 +294,6 @@ function showSpinAnalysis() {
 }
 
 function confirmSequence(f, s, t) {
-	console.log("f:" + f + " s:" + s + " t:" + t);
 	var found = false;
 	var i = 0;
 	if (f === undefined || s === undefined || t === undefined) {
@@ -308,7 +304,6 @@ function confirmSequence(f, s, t) {
 		var diff = -1;
 		for (var i = 3; i < posList.length; i++) {
 			if (posList[i + 1] !== undefined && (posList[i] == parseInt(f) && posList[i + 1] == parseInt(s))) {
-				console.log("v:" + posList[i] + " i:" + i + " posList[i + 1]:" + posList[i + 1] + " posList[i + 2]" + posList[i + 2]);
 				if (posList[i + 2] !== undefined && diff == -1) {
 					if (parseInt(t) >= posList[i + 2]) {
 						diff = parseInt(t) - posList[i + 2];
@@ -336,8 +331,6 @@ function saveSequence() {
 			seqMap.get(posList[1]).set(posList[0], ++val);
 		}
 	}
-	console.log("After update.. Seq. Map");
-	console.log(seqMap);
 }
 
 
@@ -381,8 +374,6 @@ function initMap() {
 		}
 		seqMap.set(v, m);
 	});
-	console.log("Seq Map initialized....");
-	console.log(seqMap);
 }
 
 function formRollingSequence(startNum) {
