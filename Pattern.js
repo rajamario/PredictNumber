@@ -215,7 +215,7 @@ function showSpinAnalysis() {
 	patternButton += "<\/tr><\/table>";
 	//console.log(print);
 	if (patternButton.length > 0) {
-		$("#patternFlow").html("<h5>Pattern:&nbsp;<\/h5>" + patternButton);
+		$("#patternFlow").html("<h5>Style:&nbsp;<\/h5>" + patternButton);
 	} else {
 		$("#patternFlow").html("Need more Spins to identify pattern....");
 	}
@@ -237,11 +237,11 @@ function showSpinAnalysis() {
 			//pos -1
 			disNum = ((f + 1) % 10);
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"p1&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"+p1&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
 			//pos -2
 			disNum = ((f + 2) % 10);
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"p2&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"+p2&nbsp;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
 			//pos -1 
 			if (f > 1) {
 				disNum = ((f - 1) % 10);
@@ -291,7 +291,7 @@ function showSpinAnalysis() {
 			//duplicate
 		}
 		patternCalc += "<\/tr><\/table>";
-		$("#patternCalc").html("<h5>Possible Calc:&nbsp;<\/h5>" + patternCalc);
+		$("#patternCalc").html("<h5>Calculate:&nbsp;<\/h5>" + patternCalc);
 	}	
 	
 }
