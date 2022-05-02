@@ -83,13 +83,17 @@ function addToOngoingSpin(obj) {
 	}
 }
 
-function planNextMove(obj, spl) {
-	var lastMove = spl || posList[0];
+function planNextMove(obj, spl, htmlId) {
+	var lastMove = spl != undefined ? spl : posList[0];
 	var formation = formRollingSequence(ongoingSpins[ongoingSpins.length - 1]);
 	var nextPositions = locateNextSlots(formation, obj ? parseInt(obj.value) : parseInt(lastMove));
 	var row = 0;
 	var print = "<table><tr>";
 	nextPositions = nextPositions.sort(function(a, b){return a-b});
+	
+	if(htmlId != undefined){
+		return nextPositions;
+	}
 	nextPositions.forEach(function(v) {
 		row += 1;
 		print += "<td class=\"";
@@ -225,36 +229,36 @@ function showSpinAnalysis() {
 			var f = parseInt(posList[0]);
 			var s = parseInt(posList[1]);
 			var disNum = 0;
-			//+1
-			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"1p"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"1\" \/></td>";
-			//+2
-			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"2p"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"2\" \/></td>";
-			//pos -1
-			disNum = ((f + 1) % 10);
-			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"&uarr;1"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
-			//pos -2
-			disNum = ((f + 2) % 10);
-			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"&uarr;2"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
-			//pos -1 
+			//1 posistion movement 
+			console.log("indexforCalc:"+indexforCalc);
 			if (f > 1) {
 				disNum = ((f - 1) % 10);
 				indexforCalc++;
-				patternCalc += "<td>" + "<font class=\"superScript\">" + "&darr;1" + "<\/font>" + "<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+				patternCalc += "<td>" + "<font class=\"superScript\">" + "1p" + "<\/font>" +"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+ "<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			}
-			if (parseInt(indexforCalc) % 4 == 0) {
-				patternCalc += "<\/tr><tr>";
-			}
-			//pos -2
+			console.log("indexforCalc:"+indexforCalc);
+			//2 posistion movement
 			if (f > 2) {
 				disNum = ((f - 2) % 10);
 				indexforCalc++;
-				patternCalc += "<td>" + "<font class=\"superScript\">" + "&darr;2" + "<\/font>" + "<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+				patternCalc += "<td>" + "<font class=\"superScript\">" + "2p" + "<\/font>" + "<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			}
-			if (parseInt(indexforCalc) % 4 == 0) {
+			console.log("indexforCalc:"+indexforCalc);
+			//Half
+			if (f % 2 == 0) {
+				disNum = ((f / 2));
+				indexforCalc++;
+				patternCalc += "<td>"+"<font class=\"superScript\">"+"&frac12;"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			}
+			console.log("indexforCalc:"+indexforCalc);
+			//Double
+			if (f < 6) {
+				disNum = ((f * 2) % 10);
+				indexforCalc++;
+				patternCalc += "<td>"+"<font class=\"superScript\">"+"*2"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			}
+			console.log("indexforCalc:"+indexforCalc);
+			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
 			
@@ -265,33 +269,47 @@ function showSpinAnalysis() {
 				disNum = ((s - f) % 10);
 			}
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"&Delta;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
-			if (parseInt(indexforCalc) % 4 == 0) {
-				patternCalc += "<\/tr><tr>";
-			}
-			if (parseInt(indexforCalc) % 4 == 0) {
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"&Delta;"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			console.log("indexforCalc:"+indexforCalc);
+			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
 			//add
 			disNum = ((f + s) % 10);
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"&sum;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
-			if (parseInt(indexforCalc) % 4 == 0) {
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"&sum;"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			console.log("indexforCalc:"+indexforCalc);
+			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
-			//Half
-			if (f % 2 == 0) {
-				disNum = ((f / 2));
-				indexforCalc++;
-				patternCalc += "<td>"+"<font class=\"superScript\">"+"&frac12;"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			
+			//1
+			indexforCalc++;
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"&darr;1"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, "1", this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"1\" \/></td>";
+			console.log("indexforCalc:"+indexforCalc);
+			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
+				patternCalc += "<\/tr><tr>";
 			}
-			//Double
-			if (f < 6) {
-				disNum = ((f * 2) % 10);
-				indexforCalc++;
-				patternCalc += "<td>"+"<font class=\"superScript\">"+"*2"+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			//+2
+			indexforCalc++;
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"&darr;2"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, "2", this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"2\" \/></td>";
+			console.log("indexforCalc:"+indexforCalc);
+			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
+				patternCalc += "<\/tr><tr>";
 			}
-
+			//pos -1
+			disNum = ((f + 1) % 10);
+			indexforCalc++;
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"&uarr;1"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
+			console.log("indexforCalc:"+indexforCalc);
+			if (indexforCalc != 0 && indexforCalc != 8 && parseInt(indexforCalc) % 4 == 0) {
+				patternCalc += "<\/tr><tr>";
+			}
+			//pos -2
+			disNum = ((f + 2) % 10);
+			indexforCalc++;
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"&uarr;2"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>" +"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
+			console.log("indexforCalc:"+indexforCalc);
 			//duplicate
 		}
 		patternCalc += "<\/tr><\/table>";
