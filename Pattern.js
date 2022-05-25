@@ -274,6 +274,9 @@ function showSpinAnalysis() {
 				patternCalc += "<td>" + "<font class=\"superScript\">" + "1p&darr;" + "<\/font>" +"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+ "<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			}
 			console.log("indexforCalc:"+indexforCalc);
+			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
+				patternCalc += "<\/tr><tr>";
+			}
 			//2 posistion movement
 			if (f > 2) {
 				disNum = ((f - 2) % 10);
