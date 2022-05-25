@@ -229,21 +229,6 @@ function showSpinAnalysis() {
 			var f = parseInt(posList[0]);
 			var s = parseInt(posList[1]);
 			var disNum = 0;
-			//1 posistion movement 
-			console.log("indexforCalc:"+indexforCalc);
-			if (f > 1) {
-				disNum = ((f - 1) % 10);
-				indexforCalc++;
-				patternCalc += "<td>" + "<font class=\"superScript\">" + "1p" + "<\/font>" +"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+ "<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
-			}
-			console.log("indexforCalc:"+indexforCalc);
-			//2 posistion movement
-			if (f > 2) {
-				disNum = ((f - 2) % 10);
-				indexforCalc++;
-				patternCalc += "<td>" + "<font class=\"superScript\">" + "2p" + "<\/font>" + "<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
-			}
-			console.log("indexforCalc:"+indexforCalc);
 			//Half
 			if (f % 2 == 0) {
 				disNum = ((f / 2));
@@ -271,9 +256,7 @@ function showSpinAnalysis() {
 			indexforCalc++;
 			patternCalc += "<td>"+"<font class=\"superScript\">"+"&Delta;"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			console.log("indexforCalc:"+indexforCalc);
-			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
-				patternCalc += "<\/tr><tr>";
-			}
+			
 			//add
 			disNum = ((f + s) % 10);
 			indexforCalc++;
@@ -283,16 +266,35 @@ function showSpinAnalysis() {
 				patternCalc += "<\/tr><tr>";
 			}
 			
+			//1 posistion movement 
+			console.log("indexforCalc:"+indexforCalc);
+			if (f > 1) {
+				disNum = ((f - 1) % 10);
+				indexforCalc++;
+				patternCalc += "<td>" + "<font class=\"superScript\">" + "1p&darr;" + "<\/font>" +"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+ "<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			}
+			console.log("indexforCalc:"+indexforCalc);
+			//2 posistion movement
+			if (f > 2) {
+				disNum = ((f - 2) % 10);
+				indexforCalc++;
+				patternCalc += "<td>" + "<font class=\"superScript\">" + "2p&darr;" + "<\/font>" + "<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			}
+			console.log("indexforCalc:"+indexforCalc);
+			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
+				patternCalc += "<\/tr><tr>";
+			}
+			
 			//1
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"&darr;1"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, "1", this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"1\" \/></td>";
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"1st"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, "1", this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"1\" \/></td>";
 			console.log("indexforCalc:"+indexforCalc);
 			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
 			//+2
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"&darr;2"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, "2", this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"2\" \/></td>";
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"2nd"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, "2", this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"2\" \/></td>";
 			console.log("indexforCalc:"+indexforCalc);
 			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
