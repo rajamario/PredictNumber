@@ -232,6 +232,12 @@ function analyzeDynPattern() {
 		});
 		//d-double, h-half, s-subtract, a-addition, l-last, nm-number match, u1-up 1pos, d1-down 1pos, 1s-1st pos
 		for (var i = (i>25 ? 25 : posList.length-1); i > -1; i--) {
+			if (posList[i] ==  posList[i-1]) {
+				var c = parseInt(dynPatMap.get("l"));
+				if (c != undefined) {
+					dynPatMap.set("l", ++c);
+				}
+			}
 			if (posList[i] - 1 ==  posList[i-1]) {
 				var c = parseInt(dynPatMap.get("d1"));
 				if (c != undefined) {
@@ -244,51 +250,54 @@ function analyzeDynPattern() {
 					dynPatMap.set("u1", ++c);
 				}
 			}
-			if (posList[i] ==  posList[i-1]) {
-				var c = parseInt(dynPatMap.get("l"));
-				if (c != undefined) {
-					dynPatMap.set("l", ++c);
-				}
-			}
 			if (posList[i] != posList[i - 1] && posList[i - 1] == 1) {
 				var c = parseInt(dynPatMap.get("1s"));
 				if (c != undefined) {
 					dynPatMap.set("1s", ++c);
 				}
 			}
-			if (posList[i - 2] == posList[i - 1] - posList[i] || posList[i - 2] == posList[i] - posList[i - 1]) {
-				var c = parseInt(dynPatMap.get("s"));
-				if (c != undefined) {
-					dynPatMap.set("s", ++c);
+			if (posList[i] != 0 && posList[i - 1] != 0) {
+				if (posList[i - 2] == posList[i - 1] - posList[i] || posList[i - 2] == posList[i] - posList[i - 1]) {
+					var c = parseInt(dynPatMap.get("s"));
+					if (c != undefined) {
+						dynPatMap.set("s", ++c);
+					}
 				}
-			}
-			if (posList[i - 2] == posList[i - 1] + posList[i]) {
-				var c = parseInt(dynPatMap.get("a"));
-				if (c != undefined) {
-					dynPatMap.set("a", ++c);
+				if (posList[i - 2] == posList[i - 1] + posList[i]) {
+					var c = parseInt(dynPatMap.get("a"));
+					if (c != undefined) {
+						dynPatMap.set("a", ++c);
+					}
 				}
-			}
-			if (posList[i - 1] == posList[i]/2) {
-				var c = parseInt(dynPatMap.get("h"));
-				if (c != undefined) {
-					dynPatMap.set("h", ++c);
+				if (posList[i - 1] == posList[i] / 2) {
+					var c = parseInt(dynPatMap.get("h"));
+					if (c != undefined) {
+						dynPatMap.set("h", ++c);
+					}
 				}
-			}
-			if (posList[i - 1] == posList[i]*2) {
-				var c = parseInt(dynPatMap.get("d"));
-				if (c != undefined) {
-					dynPatMap.set("d", ++c);
+				if (posList[i - 1] == posList[i] * 2) {
+					var c = parseInt(dynPatMap.get("d"));
+					if (c != undefined) {
+						dynPatMap.set("d", ++c);
+					}
 				}
-			}
-			//TODO: To be corrected
-			var numMatch = confirmSequence(posList[i], posList[i-1], posList[i-2]);
-			if (numMatch) {
-				var c = parseInt(dynPatMap.get("nm"));
-				if (c != undefined) {
-					dynPatMap.set("nm", ++c);
+				//TODO: To be corrected
+				var numMatch = confirmSequence(posList[i], posList[i - 1], posList[i - 2]);
+				if (numMatch) {
+					var c = parseInt(dynPatMap.get("nm"));
+					if (c != undefined) {
+						dynPatMap.set("nm", ++c);
+					}
 				}
 			}
 		}
+		
+		var cPrint = "<font class=\"footNote\">";
+		dynPatMap.forEach(function(v, k) {
+			cPrint += k + ":" + v + "&nbsp;&nbsp;";
+		});
+		cPrint += "<\/font>";
+		$("#patternCount").html(cPrint);
 		console.log("dynPattens:");
 		console.log(dynPatMap);
 	}
