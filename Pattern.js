@@ -5,6 +5,12 @@ var black = new Array(2, 35, 4, 33, 6, 31, 8, 29, 10, 13, 24, 15, 22, 17, 20, 11
 var seqMap = new Map();
 var posList = new Array();
 var lastSpin = new Array();
+var nextAll = new Array();
+var nextSelected = new Array();
+var dynPatMap = new Map();
+//d-double, h-half, s-subtract, a-addition, l-last, nm-number match, u1-up 1pos, d1-down 1pos, 1s-1st pos 
+var dynPatterns = new Array("d","h","s","a","l","nm","u1","d1","1s");   
+var minRepeat = 1;
 var db = [
 	//new Array(16, 10, 28, 3, 6, 35, 16, 7, 16, 35, 25, 11, 2, 88, 30, 3, 26, 15, 12, 13, 16, 14, 34),
 	//new Array(6, 88, 19, 24, 26, 34, 2, 6, 32, 20, 31, 8, 33, 34, 29, 6, 5, 34, 19, 1, 20, 12, 30)
@@ -72,6 +78,8 @@ function showSpin() {
 
 function addToOngoingSpin(obj) {
 	if ($(obj).val()) {
+		nextAll = new Array();
+		nextSelected = new Array();
 		ongoingSpins.push(parseInt($(obj).val()));
 		db.pop();
 		db.push(ongoingSpins);
@@ -80,6 +88,7 @@ function addToOngoingSpin(obj) {
 		$(".undo").show();
 		planNextMove();
 		getSpecialSequence();
+		analyzeDynPattern();
 	}
 }
 
@@ -94,6 +103,43 @@ function planNextMove(obj, spl, htmlId) {
 	if(htmlId != undefined){
 		return nextPositions;
 	}
+	
+	if ($(obj) && ($(obj).hasClass('patternCalcButton') || $(obj).hasClass('patternCalcButtonRepat'))) {
+		if ($(obj).hasClass('patternCalcButtonSelected')) {
+			$(obj).removeClass('patternCalcButtonSelected');
+			removeAddedNextSelected(nextPositions);
+			//Remove if any other button has similar values.
+			var v = $(obj).val();
+			$.each($('.patternCalcButton'), function() {
+				if (v == parseInt($(this).val()) && $(this).hasClass('patternCalcButtonSelected')) {
+					$(this).removeClass('patternCalcButtonSelected');
+				}
+			});
+			$.each($('.patternCalcButtonRepat'), function() {
+				if (v == parseInt($(this).val()) && $(this).hasClass('patternCalcButtonSelected')) {
+					$(this).removeClass('patternCalcButtonSelected');
+				}
+			});
+			console.log("Removing:" + nextPositions);
+		} else {
+			$(obj).addClass('patternCalcButtonSelected');
+			addToNextSelected(nextPositions);
+			//Select if any other button has similar values.
+			var v = $(obj).val();
+			$.each($('.patternCalcButton'), function() {
+				if (v == parseInt($(this).val())) {
+					$(this).addClass('patternCalcButtonSelected');
+				}
+			});
+			$.each($('.patternCalcButtonRepat'), function() {
+				if (v == parseInt($(this).val())) {
+					$(this).addClass('patternCalcButtonSelected');
+				}
+			});
+			console.log("Adding:" + nextPositions);
+		}
+	}
+	
 	nextPositions.forEach(function(v) {
 		row += 1;
 		print += "<td class=\"";
@@ -110,10 +156,12 @@ function planNextMove(obj, spl, htmlId) {
 		}
 		//print += v;
 	});
+	if (parseInt(dynPatMap.get("l")) >= minRepeat) {
+		addToNextAll(nextPositions);
+	}
 
 	print += "<\/td><td>&nbsp;&nbsp;&nbsp;<\/td>";
 
-	//	if (!obj) {
 	lastSpin = lastSpin.sort(function(a, b) { return a - b });
 	lastSpin.forEach(function(v) {
 		print += "<td class=\"";
@@ -126,10 +174,124 @@ function planNextMove(obj, spl, htmlId) {
 		}
 		print += v + "<\/td>"
 	});
-	//}
+	addToNextAll(lastSpin);
 
 	print += "<\/tr><\/table>";
-	$("#next").html("<h5>Possible Next:&nbsp;<\/h5>" + print);
+	$("#next").html("<h5>Selected Positions:&nbsp;<\/h5>" + print);
+	
+	nextAll = nextAll.filter((item, index) =>
+		parseInt(nextAll[index]) == parseInt(item)).sort(function(a, b) { return a - b });
+	if (nextSelected.length == 0 )  {
+		$("#nextSelected").hide();
+		$("#nextAll").show();
+		print = "<table><tr>";
+		nextAll.forEach(function(v) {
+			print += "<td class=\"";
+			if (red.indexOf(parseInt(v)) != -1) {
+				print += "redButton\">";
+			} else if (black.indexOf(parseInt(v)) != -1) {
+				print += "blackButton\">";
+			} else {
+				print += "greenButton\">";
+			}
+			print += v + "<\/td>"
+		});
+		print += "<\/tr><\/table>";
+
+		$("#nextAll").html("<h5>Possible All Next (Auto):&nbsp;<\/h5>" + print);
+		console.log("Size:" + nextAll.length + " ==> NextALL:" + nextAll);
+	} else {
+		$("#nextAll").hide();
+		$("#nextSelected").show();
+		nextSelected = nextSelected.filter((item, index) =>
+			parseInt(nextSelected[index]) == parseInt(item)).sort(function(a, b) { return a - b });
+
+		print = "<table><tr>";
+		nextSelected.forEach(function(v) {
+			print += "<td class=\"";
+			if (red.indexOf(parseInt(v)) != -1) {
+				print += "redButton\">";
+			} else if (black.indexOf(parseInt(v)) != -1) {
+				print += "blackButton\">";
+			} else {
+				print += "greenButton\">";
+			}
+			print += v + "<\/td>"
+		});
+		print += "<\/tr><\/table>";
+
+		$("#nextSelected").html("<h5>Possible All Next (Selected):&nbsp;<\/h5>" + print);
+		console.log("Size:" + nextSelected.length + " ==> NextALL:" + nextSelected);
+	}
+}
+
+function analyzeDynPattern() {
+	if (posList) {
+		dynPatterns.forEach(function(v) {
+			dynPatMap.set(v, 0);
+		});
+		//d-double, h-half, s-subtract, a-addition, l-last, nm-number match, u1-up 1pos, d1-down 1pos, 1s-1st pos
+		for (var i = (i>25 ? 25 : posList.length-1); i > -1; i--) {
+			if (posList[i] - 1 ==  posList[i-1]) {
+				var c = parseInt(dynPatMap.get("d1"));
+				if (c != undefined) {
+					dynPatMap.set("d1", ++c);
+				}
+			}
+			if (posList[i] + 1 ==  posList[i-1]) {
+				var c = parseInt(dynPatMap.get("u1"));
+				if (c != undefined) {
+					dynPatMap.set("u1", ++c);
+				}
+			}
+			if (posList[i] ==  posList[i-1]) {
+				var c = parseInt(dynPatMap.get("l"));
+				if (c != undefined) {
+					dynPatMap.set("l", ++c);
+				}
+			}
+			if (posList[i] != posList[i - 1] && posList[i - 1] == 1) {
+				var c = parseInt(dynPatMap.get("1s"));
+				if (c != undefined) {
+					dynPatMap.set("1s", ++c);
+				}
+			}
+			if (posList[i - 2] == posList[i - 1] - posList[i] || posList[i - 2] == posList[i] - posList[i - 1]) {
+				var c = parseInt(dynPatMap.get("s"));
+				if (c != undefined) {
+					dynPatMap.set("s", ++c);
+				}
+			}
+			if (posList[i - 2] == posList[i - 1] + posList[i]) {
+				var c = parseInt(dynPatMap.get("a"));
+				if (c != undefined) {
+					dynPatMap.set("a", ++c);
+				}
+			}
+			if (posList[i - 1] == posList[i]/2) {
+				var c = parseInt(dynPatMap.get("h"));
+				if (c != undefined) {
+					dynPatMap.set("h", ++c);
+				}
+			}
+			if (posList[i - 1] == posList[i]*2) {
+				var c = parseInt(dynPatMap.get("d"));
+				if (c != undefined) {
+					dynPatMap.set("d", ++c);
+				}
+			}
+			//TODO: To be corrected
+			var numMatch = confirmSequence(posList[i], posList[i-1], posList[i-2]);
+			if (numMatch) {
+				var c = parseInt(dynPatMap.get("nm"));
+				if (c != undefined) {
+					dynPatMap.set("nm", ++c);
+				}
+			}
+		}
+		console.log("dynPattens:");
+		console.log(dynPatMap);
+	}
 }
 
 function formatForDisplay(array) {
@@ -228,21 +390,54 @@ function showSpinAnalysis() {
 		if (posList[0] != undefined && posList[1] != undefined) {
 			var f = parseInt(posList[0]);
 			var s = parseInt(posList[1]);
+			var seventh = false;
+			var nineth = false;
 			var disNum = 0;
+			
+			//Seventh
+			if (f == 0 || s == 0 || f == s || (f == 9 || s == 9)) {
+				disNum = 7;
+				indexforCalc++;
+				var seventhMove = planNextMove(null, disNum, this);
+				patternCalc += "<td>" + "<font class=\"superScript\">" + "7th" + "<\/font>" + "<font class=\"leftSuperScript\">" + seventhMove + "<\/font>" + "<input type=\"button\" class=\"patternCalcButtonRepat\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+				addToNextAll(seventhMove);
+				seventh = true;
+				//console.log("indexforCalc:"+indexforCalc);
+			}
+			
+			//Nineth
+			if (f == 7 || s == 7) {
+				disNum = 9;
+				indexforCalc++;
+				var ninethMove = planNextMove(null, disNum, this);
+				patternCalc += "<td>" + "<font class=\"superScript\">" + "9th" + "<\/font>" + "<font class=\"leftSuperScript\">" + planNextMove(null, disNum, this) + "<\/font>" + "<input type=\"button\" class=\"patternCalcButtonRepat\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+				addToNextAll(ninethMove);
+				nineth = true;
+				//console.log("indexforCalc:"+indexforCalc);
+			}
+
 			//Half
 			if (f % 2 == 0) {
 				disNum = ((f / 2));
 				indexforCalc++;
-				patternCalc += "<td>"+"<font class=\"superScript\">"+"&frac12;"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+				var halfMove = planNextMove(null, disNum, this);
+				var repeat = parseInt(dynPatMap.get("h")) >= minRepeat;
+				patternCalc += "<td>"+"<font class=\"superScript\">"+"&frac12;"+"<\/font>"+"<font class=\"leftSuperScript\">"+ halfMove +"<\/font>"+"<input type=\"button\" class=\""+ (repeat ? "patternCalcButtonRepat" : "patternCalcButton") +"\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+				if(repeat){
+					addToNextAll(halfMove);
+				}
 			}
-			console.log("indexforCalc:"+indexforCalc);
 			//Double
 			if (f < 6) {
 				disNum = ((f * 2) % 10);
 				indexforCalc++;
-				patternCalc += "<td>"+"<font class=\"superScript\">"+"*2"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+				var doubleMove = planNextMove(null, disNum, this);
+				var repeat = parseInt(dynPatMap.get("d")) >= minRepeat;
+				patternCalc += "<td>"+"<font class=\"superScript\">"+"*2"+"<\/font>"+"<font class=\"leftSuperScript\">"+ doubleMove +"<\/font>"+"<input type=\"button\" class=\""+(repeat ? "patternCalcButtonRepat" : "patternCalcButton")+"\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+				if(repeat){
+					addToNextAll(halfMove);
+				}
 			}
-			console.log("indexforCalc:"+indexforCalc);
 			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
@@ -254,73 +449,171 @@ function showSpinAnalysis() {
 				disNum = ((s - f) % 10);
 			}
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"&Delta;"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
-			console.log("indexforCalc:"+indexforCalc);
-			
+			var diffMove = planNextMove(null, disNum, this);
+			var repeat = parseInt(dynPatMap.get("s")) >= minRepeat;
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"&Delta;"+"<\/font>"+"<font class=\"leftSuperScript\">"+ diffMove +"<\/font>"+"<input type=\"button\" class=\""+(repeat ? "patternCalcButtonRepat" : "patternCalcButton")+"\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			if (repeat) {
+				addToNextAll(halfMove);
+			}
+			if (indexforCalc != 0 && indexforCalc != 8 && parseInt(indexforCalc) % 4 == 0) {
+				patternCalc += "<\/tr><tr>";
+			}
+
 			//add
-			disNum = ((f + s) % 10);
+			if ((f + s) < 10) {
+				disNum = f + s;
+				indexforCalc++;
+				var addMove = planNextMove(null, disNum, this);
+				var repeat = parseInt(dynPatMap.get("a")) >= minRepeat;
+				patternCalc += "<td>" + "<font class=\"superScript\">" + "&sum;" + "<\/font>" + "<font class=\"leftSuperScript\">" + addMove + "<\/font>" + "<input type=\"button\" class=\""+(repeat ? "patternCalcButtonRepat" : "patternCalcButton")+"\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+				if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
+					patternCalc += "<\/tr><tr>";
+				}
+				if(repeat){
+					addToNextAll(halfMove);
+				}
+			}
+			
+			//Last to Last Position 
+			if (!seventh || !nineth) {
+				disNum = s;
+				indexforCalc++;
+				var lastToLastMove = planNextMove(null, disNum, this);
+				patternCalc += "<td>" + "<font class=\"superScript\">" + "LL" + "<\/font>" + "<font class=\"leftSuperScript\">" + lastToLastMove + "<\/font>" + "<input type=\"button\" class=\"patternCalcButtonRepat\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+				addToNextAll(lastToLastMove);
+				if (indexforCalc != 0 && indexforCalc != 8 && parseInt(indexforCalc) % 4 == 0) {
+					patternCalc += "<\/tr><tr>";
+				}
+				if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
+					patternCalc += "<\/tr><tr>";
+				}
+			}
+			
+			//1 Position Up
+			disNum = ((f + 1) % 10);
 			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"&sum;"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
-			console.log("indexforCalc:"+indexforCalc);
+			var up1PosMove = planNextMove(null, disNum, this);
+			var repeat = parseInt(dynPatMap.get("u1")) >= minRepeat;
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"&uarr;1"+"<\/font>"+"<font class=\"leftSuperScript\">"+ up1PosMove +"<\/font>"+"<input type=\"button\" class=\""+(repeat ? "patternCalcButtonRepat" : "patternCalcButton")+"\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
+			if (repeat) {
+				addToNextAll(up1PosMove);
+			}
+			if (indexforCalc != 0 && indexforCalc != 8 && parseInt(indexforCalc) % 4 == 0) {
+				patternCalc += "<\/tr><tr>";
+			}
 			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
 			
-			//1 posistion movement 
-			console.log("indexforCalc:"+indexforCalc);
+			//1 Position Down 
 			if (f > 1) {
 				disNum = ((f - 1) % 10);
 				indexforCalc++;
-				patternCalc += "<td>" + "<font class=\"superScript\">" + "1p&darr;" + "<\/font>" +"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+ "<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+				var down1PosMove = planNextMove(null, disNum, this);
+				var repeat = parseInt(dynPatMap.get("d1")) >= minRepeat;
+				patternCalc += "<td>" + "<font class=\"superScript\">" + "1p&darr;" + "<\/font>" +"<font class=\"leftSuperScript\">"+ down1PosMove +"<\/font>"+ "<input type=\"button\" class=\""+(repeat ? "patternCalcButtonRepat" : "patternCalcButton")+"\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			}
-			console.log("indexforCalc:"+indexforCalc);
+			if (repeat) {
+				addToNextAll(down1PosMove);
+			}
 			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
+			/*
 			//2 posistion movement
 			if (f > 2) {
 				disNum = ((f - 2) % 10);
 				indexforCalc++;
 				patternCalc += "<td>" + "<font class=\"superScript\">" + "2p&darr;" + "<\/font>" + "<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			}
-			console.log("indexforCalc:"+indexforCalc);
 			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
+			*/
 			
-			//1
-			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"1st"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, "1", this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"1\" \/></td>";
-			console.log("indexforCalc:"+indexforCalc);
-			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
-				patternCalc += "<\/tr><tr>";
-			}
-			//+2
-			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"2nd"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, "2", this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"2\" \/></td>";
-			console.log("indexforCalc:"+indexforCalc);
-			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
-				patternCalc += "<\/tr><tr>";
-			}
-			//pos -1
-			disNum = ((f + 1) % 10);
-			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"&uarr;1"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
-			console.log("indexforCalc:"+indexforCalc);
-			if (indexforCalc != 0 && indexforCalc != 8 && parseInt(indexforCalc) % 4 == 0) {
-				patternCalc += "<\/tr><tr>";
-			}
+			/*
 			//pos -2
 			disNum = ((f + 2) % 10);
 			indexforCalc++;
 			patternCalc += "<td>"+"<font class=\"superScript\">"+"&uarr;2"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>" +"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
-			console.log("indexforCalc:"+indexforCalc);
-			//duplicate
+			//console.log("indexforCalc:"+indexforCalc);
+			if (indexforCalc != 0 && indexforCalc != 8 && parseInt(indexforCalc) % 4 == 0) {
+				patternCalc += "<\/tr><tr>";
+			}
+			*/
+			
+			//1st position
+			indexforCalc++;
+			var firstPosMove = planNextMove(null, 1, this);
+			var repeat = parseInt(dynPatMap.get("1s")) >= minRepeat;
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"1st"+"<\/font>"+"<font class=\"leftSuperScript\">"+ firstPosMove +"<\/font>"+"<input type=\"button\" class=\""+(repeat ? "patternCalcButtonRepat" : "patternCalcButton")+"\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"1\" \/></td>";
+			if (repeat) {
+				addToNextAll(firstPosMove);
+			}
+
+			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
+				patternCalc += "<\/tr><tr>";
+			}
+			/*
+			//+2
+			indexforCalc++;
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"2nd"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, "2", this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"2\" \/></td>";
+			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
+				patternCalc += "<\/tr><tr>";
+			}
+			*/
+			
+			//Add the last spin number
+			//nextAll.push(lastSpin[0]);
 		}
 		patternCalc += "<\/tr><\/table>";
 		$("#patternCalc").html("<h5>Calculate:&nbsp;<\/h5>" + patternCalc);
 	}	
 	
+}
+
+function addToNextAll(arr){
+	if (arr) {
+		arr.forEach(function(v) {
+			if (nextAll.indexOf(parseInt(v)) == -1) {
+				nextAll.push(v);
+			}
+		});
+	}
+	return nextAll;
+}
+
+function removeAddedNextAll(arr){
+	if (arr) {
+		arr.forEach(function(v) {
+			if (nextAll.indexOf(parseInt(v)) != -1) {
+				nextAll.splice(nextAll.indexOf(parseInt(v)),1);
+			}
+		});
+	}
+	return nextAll;
+}
+
+function addToNextSelected(arr){
+	if (arr) {
+		arr.forEach(function(v) {
+			if (nextSelected.indexOf(parseInt(v)) == -1) {
+				nextSelected.push(v);
+			}
+		});
+	}
+	return nextSelected;
+}
+
+function removeAddedNextSelected(arr){
+	if (arr) {
+		arr.forEach(function(v) {
+			if (nextSelected.indexOf(parseInt(v)) != -1) {
+				nextSelected.splice(nextSelected.indexOf(parseInt(v)),1);
+			}
+		});
+	}
+	return nextSelected;
 }
 
 function confirmSequence(f, s, t) {
@@ -453,6 +746,7 @@ function checkReload() {
 }
 
 function undoLast() {
+	removeAddedNextAll(planNextMove(null, parseInt(posList[0]), this));
 	ongoingSpins.pop();
 	showSpinAnalysis();
 	planNextMove();
