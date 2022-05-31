@@ -156,6 +156,13 @@ function planNextMove(obj, spl, htmlId) {
 		}
 		//print += v;
 	});
+
+	if ($("#repeatCount")) {
+		minRepeat = $("#repeatCount option:selected").val();
+	} else {
+		minRepeat = 1;
+	}
+
 	if (parseInt(dynPatMap.get("l")) >= minRepeat) {
 		addToNextAll(nextPositions);
 	}
