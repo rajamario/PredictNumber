@@ -205,7 +205,7 @@ function planNextMove(obj, spl, htmlId) {
 		});
 		print += "<\/tr><\/table>";
 
-		$("#nextAll").html("<h5>Possible All Next (Auto):&nbsp;<\/h5>" + print);
+		$("#nextAll").html("<h5>Possible All Next (Auto):&nbsp;<font class=\"footNote\">(" + nextAll.length + ")<\/font><\/h5>" + print);
 		console.log("Size:" + nextAll.length + " ==> NextALL:" + nextAll);
 	} else {
 		$("#nextAll").hide();
@@ -227,7 +227,7 @@ function planNextMove(obj, spl, htmlId) {
 		});
 		print += "<\/tr><\/table>";
 
-		$("#nextSelected").html("<h5>Possible All Next (Selected):&nbsp;<\/h5>" + print);
+		$("#nextSelected").html("<h5>Possible All Next (Selected):&nbsp;<font class=\"footNote\">(" + nextSelected.length + ")<\/font><\/h5>" + print);
 		console.log("Size:" + nextSelected.length + " ==> NextALL:" + nextSelected);
 	}
 }
