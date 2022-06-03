@@ -570,7 +570,7 @@ function showSpinAnalysis() {
 				indexforCalc++;
 				patternCalc += "<td>" + "<font class=\"superScript\">" + "&darr;2p" + "<\/font>" + "<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			}
-			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
+			if (indexforCalc != 0 && indexforCalc> 5 && parseInt(indexforCalc) % 5 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
 			
@@ -579,7 +579,7 @@ function showSpinAnalysis() {
 			indexforCalc++;
 			patternCalc += "<td>"+"<font class=\"superScript\">"+"&uarr;2p"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>" +"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
 			//console.log("indexforCalc:"+indexforCalc);
-			if (indexforCalc != 0 && indexforCalc != 8 && parseInt(indexforCalc) % 4 == 0) {
+			if (indexforCalc != 0 && indexforCalc > 8 && parseInt(indexforCalc) % 9 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
 			
@@ -592,7 +592,7 @@ function showSpinAnalysis() {
 				addToNextAll(firstPosMove);
 			}
 
-			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
+			if (indexforCalc != 0 &&  indexforCalc> 5 && parseInt(indexforCalc) % 5 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
 			/*
@@ -609,8 +609,22 @@ function showSpinAnalysis() {
 		}
 		patternCalc += "<\/tr><\/table>";
 		$("#patternCalc").html("<h5>Calculate:&nbsp;<\/h5>" + patternCalc);
+		
+		var notSeen = findNotSeenPositions();
+		if (notSeen && notSeen.length >0){
+			var print = "<table><tr>";
+			var index = -1;
+			for (i = 0; i < notSeen.length; i++) {
+				index++;
+				var positions = planNextMove(null, notSeen[i], this);
+				print += "<td>" + "<font class=\"leftSuperScript\">" + positions + "<\/font>" + "<input type=\"button\" class=\"patternCalcButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + notSeen[i] + "\" \/></td>";
+			}
+			print += "<\/tr><\/table>";
+			$("#notSeen").html("<h5>Not seen in 16 Spins:&nbsp;<\/h5>" + print);
+		} else {
+			$("#notSeen").html("");
+		}
 	}	
-	
 }
 
 function addToNextAll(arr){
@@ -623,6 +637,25 @@ function addToNextAll(arr){
 	}
 	return nextAll;
 }
+
+function findNotSeenPositions() {
+	if (posList.length >= 16) {
+		var arr = new Array();
+		for (i = 1; i<10; i++) {
+			var found = false;
+			for (j = 0; j < 16; j++) {
+				if(posList[j] == i) {
+					found = true;
+				}
+			}
+			if (!found) {
+				arr.push(i);
+			}
+		}
+		console.log("Not seen:" + arr);
+		return arr;
+	}
+} 
 
 function removeAddedNextAll(arr){
 	if (arr) {
