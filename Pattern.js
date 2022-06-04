@@ -11,6 +11,7 @@ var dynPatMap = new Map();
 //d-double, h-half, s-subtract, a-addition, l-last, nm-number match, u1-up 1pos, d1-down 1pos, 1s-1st pos, d2- down 2pos, u2- up 2pos, 7-7th pos
 var dynPatterns = new Array("d","h","s","a","l","u1","d1","1s", "7p", "9p", "nm");   
 var minRepeat = 1;
+var notSeenCount = 16;
 var db = [
 	//new Array(16, 10, 28, 3, 6, 35, 16, 7, 16, 35, 25, 11, 2, 88, 30, 3, 26, 15, 12, 13, 16, 14, 34),
 	//new Array(6, 88, 19, 24, 26, 34, 2, 6, 32, 20, 31, 8, 33, 34, 29, 6, 5, 34, 19, 1, 20, 12, 30)
@@ -161,6 +162,12 @@ function planNextMove(obj, spl, htmlId) {
 		minRepeat = $("#repeatCount option:selected").val();
 	} else {
 		minRepeat = 1;
+	}
+
+	if ($("#notSeenCount")) {
+		notSeenCount = parseInt($("#notSeenCount option:selected").val());
+	} else {
+		notSeenCount = 16;
 	}
 
 	if (parseInt(dynPatMap.get("l")) >= minRepeat) {
@@ -564,24 +571,26 @@ function showSpinAnalysis() {
 			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
-			//2 posistion movement
+			
+			//pos +2
+			disNum = ((f + 2) % 10);
+			indexforCalc++;
+			patternCalc += "<td>"+"<font class=\"superScript\">"+"&uarr;2p"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>" +"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
+			//console.log("indexforCalc:"+indexforCalc);
+			if (indexforCalc != 0 && indexforCalc > 5 && parseInt(indexforCalc) % 5 == 0) {
+				patternCalc += "<\/tr><tr>";
+			}
+			
+			//-2 posistion movement
 			if (f > 2) {
 				disNum = ((f - 2) % 10);
 				indexforCalc++;
 				patternCalc += "<td>" + "<font class=\"superScript\">" + "&darr;2p" + "<\/font>" + "<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>"+"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			}
-			if (indexforCalc != 0 && indexforCalc> 5 && parseInt(indexforCalc) % 5 == 0) {
+			if (indexforCalc != 0 && indexforCalc> 8 && parseInt(indexforCalc) % 9 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
 			
-			//pos -2
-			disNum = ((f + 2) % 10);
-			indexforCalc++;
-			patternCalc += "<td>"+"<font class=\"superScript\">"+"&uarr;2p"+"<\/font>"+"<font class=\"leftSuperScript\">"+ planNextMove(null, disNum, this)+"<\/font>" +"<input type=\"button\" class=\"patternCalcButton\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\""+disNum+"\" \/></td>";
-			//console.log("indexforCalc:"+indexforCalc);
-			if (indexforCalc != 0 && indexforCalc > 8 && parseInt(indexforCalc) % 9 == 0) {
-				patternCalc += "<\/tr><tr>";
-			}
 			
 			//1st position
 			indexforCalc++;
@@ -620,7 +629,7 @@ function showSpinAnalysis() {
 				print += "<td>" + "<font class=\"leftSuperScript\">" + positions + "<\/font>" + "<input type=\"button\" class=\"patternCalcButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + notSeen[i] + "\" \/></td>";
 			}
 			print += "<\/tr><\/table>";
-			$("#notSeen").html("<h5>Not seen in 16 Spins:&nbsp;<\/h5>" + print);
+			$("#notSeen").html("<h5>Not seen in "+ notSeenCount +" Spins:&nbsp;<\/h5>" + print);
 		} else {
 			$("#notSeen").html("");
 		}
@@ -639,11 +648,11 @@ function addToNextAll(arr){
 }
 
 function findNotSeenPositions() {
-	if (posList.length >= 16) {
+	if (posList.length >= notSeenCount) {
 		var arr = new Array();
 		for (i = 1; i<10; i++) {
 			var found = false;
-			for (j = 0; j < 16; j++) {
+			for (j = 0; j < notSeenCount; j++) {
 				if(posList[j] == i) {
 					found = true;
 				}
