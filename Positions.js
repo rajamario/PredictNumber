@@ -121,7 +121,7 @@ function planNextMove(obj, spl, htmlId) {
 					$(this).removeClass('patternCalcButtonSelected');
 				}
 			});
-			console.log("Removing:" + nextPositions);
+			//console.log("Removing:" + nextPositions);
 		} else {
 			$(obj).addClass('patternCalcButtonSelected');
 			addToNextSelected(nextPositions);
@@ -137,7 +137,7 @@ function planNextMove(obj, spl, htmlId) {
 					$(this).addClass('patternCalcButtonSelected');
 				}
 			});
-			console.log("Adding:" + nextPositions);
+			//console.log("Adding:" + nextPositions);
 		}
 	}
 	
@@ -213,7 +213,7 @@ function planNextMove(obj, spl, htmlId) {
 		print += "<\/tr><\/table>";
 
 		$("#nextAll").html("<h5>Possible All Next (Auto):&nbsp;<font class=\"footNote\">(" + nextAll.length + ")<\/font><\/h5>" + print);
-		console.log("Size:" + nextAll.length + " ==> NextALL:" + nextAll);
+		//console.log("Size:" + nextAll.length + " ==> NextALL:" + nextAll);
 	} else {
 		$("#nextAll").hide();
 		$("#nextSelected").show();
@@ -235,7 +235,7 @@ function planNextMove(obj, spl, htmlId) {
 		print += "<\/tr><\/table>";
 
 		$("#nextSelected").html("<h5>Possible All Next (Selected):&nbsp;<font class=\"footNote\">(" + nextSelected.length + ")<\/font><\/h5>" + print);
-		console.log("Size:" + nextSelected.length + " ==> NextALL:" + nextSelected);
+		//console.log("Size:" + nextSelected.length + " ==> NextALL:" + nextSelected);
 	}
 }
 
@@ -332,8 +332,8 @@ function analyzeDynPattern() {
 		
 		//Sort Map
 		dynPatMap = new Map([...dynPatMap.entries()].sort((a,b) => b[1]-a[1]));
-		console.log("Sorted Map:");
-		console.log(dynPatMap);
+		//console.log("Sorted Map:");
+		//console.log(dynPatMap);
 		
 		var cPrint = "<font class=\"footNote\">";
 		dynPatMap.forEach(function(v, k) {
@@ -341,8 +341,8 @@ function analyzeDynPattern() {
 		});
 		cPrint += "<\/font>";
 		$("#patternCount").html(cPrint);
-		console.log("dynPattens:");
-		console.log(dynPatMap);
+		//console.log("dynPattens:");
+		//console.log(dynPatMap);
 	}
 }
 
@@ -410,9 +410,23 @@ function showSpinAnalysis() {
 	var row = 0;
 	var index = -1;
 	var spinIndex = ongoingSpins.length - 1 || -1;
-	moved.forEach(function(v) {
+	console.log("moved..."+moved);
+	moved.forEach(function(v, i) {
 		index++;
-		patternButton += "<td>" + "<font class=\"superScript\">" + ongoingSpins[spinIndex] + "<\/font>" + "<input type=\"button\" class=\"patternButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + v + "\" \/>";
+		var currVal = v;
+		var prev1Val = moved[i+1];
+		var prev2Val = moved[i+2];
+		var patFound = triagePattern(currVal,prev1Val,prev2Val);
+		console.log("curr:"+currVal);
+		console.log("prev1Val:"+prev1Val);
+		console.log("prev2Val:"+prev2Val);
+		console.log("patFound:"+patFound);
+		
+		if (patFound) {
+			patternButton += "<td>" + "<font class=\"superScriptPattern\">" + patFound + "-" + ongoingSpins[spinIndex] + "<\/font>" + "<input type=\"button\" class=\"patternButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + v + "\" \/>";
+		} else {
+			patternButton += "<td>" + "<font class=\"superScript\">" + ongoingSpins[spinIndex] + "<\/font>" + "<input type=\"button\" class=\"patternButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + v + "\" \/>";
+		}
 		/*
 		if (index == posList.length-1) {
 			patternButton += "<font class=\"superScript\">"+ ongoingSpins[0] + "<\/font>";
@@ -634,6 +648,59 @@ function showSpinAnalysis() {
 			$("#notSeen").html("");
 		}
 	}	
+}
+
+function triagePattern(first, second, third) {
+	var result;
+	if (first != undefined) {
+		first = parseInt(first);
+	}
+	if (first != undefined) {
+		second = parseInt(second);
+	}
+	if (first != undefined) {
+		third = parseInt(third);
+	}
+
+	if (second == first) {
+		result = "l";
+	}
+	if (second - 1 == first) {
+		result = "d1";
+	}
+	if (second - 2 == first) {
+		result = "d2";
+	}
+	if (second + 1 == first) {
+		result = "u1";
+	}
+	if (second + 2 == first) {
+		result = "u2";
+	}
+	if (second != first && first == 1) {
+		result = "1s";
+	}
+	if (second != first && first == 7) {
+		result = "7p";
+	}
+	if (second != first && first == 9) {
+		result = "9p";
+	}
+	if (second != 0 && first != 0) {
+		if (first == third - second || first == second - third) {
+			result = "sub";
+		}
+		if (first == second + third) {
+			result = "add";
+		}
+		if (first == second / 2) {
+			result = "hlf";
+		}
+		if (first == second * 2) {
+			result = "dbl";
+		}
+	}
+	return result;
 }
 
 function addToNextAll(arr){
