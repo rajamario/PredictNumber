@@ -410,17 +410,17 @@ function showSpinAnalysis() {
 	var row = 0;
 	var index = -1;
 	var spinIndex = ongoingSpins.length - 1 || -1;
-	console.log("moved..."+moved);
+	//console.log("moved..."+moved);
 	moved.forEach(function(v, i) {
 		index++;
 		var currVal = v;
 		var prev1Val = moved[i+1];
 		var prev2Val = moved[i+2];
 		var patFound = triagePattern(currVal,prev1Val,prev2Val);
-		console.log("curr:"+currVal);
-		console.log("prev1Val:"+prev1Val);
-		console.log("prev2Val:"+prev2Val);
-		console.log("patFound:"+patFound);
+		//console.log("curr:"+currVal);
+		//console.log("prev1Val:"+prev1Val);
+		//console.log("prev2Val:"+prev2Val);
+		//console.log("patFound:"+patFound);
 		
 		if (patFound) {
 			patternButton += "<td>" + "<font class=\"superScriptPattern\">" + patFound + "-" + ongoingSpins[spinIndex] + "<\/font>" + "<input type=\"button\" class=\"patternButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + v + "\" \/>";
@@ -728,7 +728,7 @@ function findNotSeenPositions() {
 				arr.push(i);
 			}
 		}
-		console.log("Not seen:" + arr);
+		//console.log("Not seen:" + arr);
 		return arr;
 	}
 } 
@@ -829,10 +829,12 @@ function getPositions(start, end) {
 	if (moves >= 19) {
 		moves = 38 - moves;
 	}
+	console.log("moves:"+ moves);
 	//temp-flipflow
-	if ($('#fs').is(":checked") && moves > 9) {
+	if ($('#fs').is(":checked") && (moves != 10 && moves > 9) ) {
 		moves = 19 - moves;
 	}
+	console.log("moves AA:"+ moves);
 
 	//console.log("moves:"+ moves);
 	return moves;
