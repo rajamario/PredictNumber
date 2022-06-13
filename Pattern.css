@@ -118,6 +118,10 @@ h5{
 	border: 2px solid #fcff82;
 }
 
+.markWon{
+	border: 2px solid #fcff82;
+}
+
 .confirmSeq{
 	font-weight: bold;
 	background-color: #d0f0c0;

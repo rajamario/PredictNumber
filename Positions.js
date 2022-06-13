@@ -58,7 +58,7 @@ function showSpin() {
 
 	val.reverse().forEach(function(v) {
 		row += 1;
-		print += "<td align=\"center\" class=\"";
+		print += "<td align=\"center\" ondblclick=\"selectWin(this);\" class=\"";
 		if (red.indexOf(parseInt(v)) != -1) {
 			print += "redButton\">";
 		} else if (black.indexOf(parseInt(v)) != -1) {
@@ -887,6 +887,16 @@ function locateNextSlots(formation, moves) {
 	}
 	//console.log("next:" + positions);
 	return positions;
+}
+
+function selectWin(obj) {
+	if ($(obj)) {
+		if ($(obj).hasClass('markWon')) {
+			$(obj).removeClass('markWon');
+		} else {
+			$(obj).addClass('markWon');
+		}
+	}
 }
 
 function checkReload() {
