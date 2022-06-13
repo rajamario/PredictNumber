@@ -12,6 +12,7 @@ var dynPatMap = new Map();
 var dynPatterns = new Array("d","h","s","a","l","u1","d1","1s", "7p", "9p", "nm");   
 var minRepeat = 1;
 var notSeenCount = 16;
+var wins = new Array();
 var db = [
 	//new Array(16, 10, 28, 3, 6, 35, 16, 7, 16, 35, 25, 11, 2, 88, 30, 3, 26, 15, 12, 13, 16, 14, 34),
 	//new Array(6, 88, 19, 24, 26, 34, 2, 6, 32, 20, 31, 8, 33, 34, 29, 6, 5, 34, 19, 1, 20, 12, 30)
@@ -56,15 +57,21 @@ function showSpin() {
 		val.push(v);
 	});
 
-	val.reverse().forEach(function(v) {
+	val.reverse().forEach(function(v,i) {
 		row += 1;
-		print += "<td align=\"center\" ondblclick=\"selectWin(this);\" class=\"";
+		print += "<td align=\"center\" ondblclick=\"selectWin(this);\" index=\"" + i + ":" + v + "\" class=\"";
 		if (red.indexOf(parseInt(v)) != -1) {
-			print += "redButton\">";
+			print += "redButton";
 		} else if (black.indexOf(parseInt(v)) != -1) {
-			print += "blackButton \">";
+			print += "blackButton";
 		} else {
-			print += "greenButton \">";
+			print += "greenButton";
+		}
+		
+		if(wins.indexOf(parseInt(v)) != -1){
+			print += " markWon\">";
+		} else {
+			print += "\">";
 		}
 		print += v + "<\/td>"
 		if (row % 14 == 0) {
@@ -766,6 +773,17 @@ function removeAddedNextSelected(arr){
 	return nextSelected;
 }
 
+function removeFromWinArray(v) {
+	if (v) {
+		//v = i.split(":")[1];
+		//v = v.replace(/["']/g, "");
+		if (wins.indexOf(parseInt(v)) != -1) {
+			wins.splice(wins.indexOf(parseInt(v)), 1);
+		}
+	}
+	return wins;
+}
+
 function confirmSequence(f, s, t) {
 	var found = false;
 	var i = 0;
@@ -829,13 +847,10 @@ function getPositions(start, end) {
 	if (moves >= 19) {
 		moves = 38 - moves;
 	}
-	console.log("moves:"+ moves);
 	//temp-flipflow
 	if ($('#fs').is(":checked") && (moves != 10 && moves > 9) ) {
 		moves = 19 - moves;
 	}
-	console.log("moves AA:"+ moves);
-
 	//console.log("moves:"+ moves);
 	return moves;
 }
@@ -893,9 +908,13 @@ function selectWin(obj) {
 	if ($(obj)) {
 		if ($(obj).hasClass('markWon')) {
 			$(obj).removeClass('markWon');
+			removeFromWinArray($(obj).text());
 		} else {
 			$(obj).addClass('markWon');
+			wins.push(parseInt($(obj).text()));
 		}
+		console.log("Wins:");
+		console.log(wins);
 	}
 }
 
