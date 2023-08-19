@@ -221,8 +221,9 @@ function planNextMove(obj, spl, htmlId) {
 		});
 		print += "<\/tr><\/table>";
 
-		$("#nextAll").html("<h5>Possible All Next (Auto):&nbsp;<font class=\"footNote\">(" + nextAll.length + ")<\/font><\/h5>" + print);
+		//$("#nextAll").html("<h5>Possible All Next (Auto):&nbsp;<font class=\"footNote\">(" + nextAll.length + ")<\/font><\/h5>" + print);
 		//console.log("Size:" + nextAll.length + " ==> NextALL:" + nextAll);
+		
 		
 		var numPrint = "<table>";
 		possibleNumbersMap.forEach(function(v, k) {
@@ -232,6 +233,7 @@ function planNextMove(obj, spl, htmlId) {
 		});
 		numPrint += "<\/table>";
 		$("#possibleAll").html("<h5>Possible Patterns:&nbsp;<br/>" + numPrint + "<\/h5>");
+		
 	} else {
 		$("#nextAll").hide();
 		$("#nextSelected").show();
@@ -581,6 +583,7 @@ function showSpinAnalysis() {
 			}
 			
 			//1 Position Up
+			/*
 			disNum = ((f + 1) % 10);
 			indexforCalc++;
 			var up1PosMove = planNextMove(null, disNum, this);
@@ -596,7 +599,9 @@ function showSpinAnalysis() {
 			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
+			*/
 			
+			/*
 			//1 Position Down 
 			if (f > 1) {
 				disNum = ((f - 1) % 10);
@@ -612,8 +617,9 @@ function showSpinAnalysis() {
 			if (indexforCalc != 0 && parseInt(indexforCalc) % 4 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
-			
+			*/
 			//pos +2
+			/*
 			disNum = ((f + 2) % 10);
 			indexforCalc++;
 			var pos2upMove = planNextMove(null, disNum, this);
@@ -623,8 +629,10 @@ function showSpinAnalysis() {
 				patternCalc += "<\/tr><tr>";
 			}
 			possibleNumbersMap.set("2up", pos2upMove);
+			*/
 			
 			//-2 posistion movement
+			/*
 			if (f > 2) {
 				disNum = ((f - 2) % 10);
 				indexforCalc++;
@@ -635,9 +643,10 @@ function showSpinAnalysis() {
 			if (indexforCalc != 0 && indexforCalc> 8 && parseInt(indexforCalc) % 9 == 0) {
 				patternCalc += "<\/tr><tr>";
 			}
-			
+			*/
 			
 			//1st position
+			/*
 			indexforCalc++;
 			var firstPosMove = planNextMove(null, 1, this);
 			var repeat = parseInt(dynPatMap.get("1s")) >= minRepeat;
@@ -646,6 +655,8 @@ function showSpinAnalysis() {
 			if (repeat) {
 				addToNextAll(firstPosMove);
 			}
+			*/
+
 
 			if (indexforCalc != 0 &&  indexforCalc> 5 && parseInt(indexforCalc) % 5 == 0) {
 				patternCalc += "<\/tr><tr>";
@@ -873,7 +884,7 @@ function getPositions(start, end) {
 		moves = 38 - moves;
 	}
 	//temp-flipflow
-	if ($('#fs').is(":checked") && (moves != 10 && moves > 9) ) {
+	if (/*$('#fs').is(":checked") &&*/ (moves != 10 && moves > 9) ) {
 		moves = 19 - moves;
 	}
 	//console.log("moves:"+ moves);
