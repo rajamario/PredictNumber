@@ -8,6 +8,7 @@ var lastSpin = new Array();
 var nextAll = new Array();
 var nextSelected = new Array();
 var dynPatMap = new Map();
+var repeatMap = new Map();
 //d-double, h-half, s-subtract, a-addition, l-last, nm-number match, u1-up 1pos, d1-down 1pos, 1s-1st pos, d2- down 2pos, u2- up 2pos, 7-7th pos
 var dynPatterns = new Array("d","h","s","a","l","u1","d1","1s", "7p", "9p", "nm");   
 var minRepeat = 1;
@@ -200,7 +201,7 @@ function planNextMove(obj, spl, htmlId) {
 	addToNextAll(lastSpin);
 
 	print += "<\/tr><\/table>";
-	$("#next").html("<h5>Selected Positions:&nbsp;<\/h5>" + print);
+	$("#next").html("<h5>Repeat Position:&nbsp;<\/h5>" + print);
 	
 	nextAll = nextAll.filter((item, index) =>
 		parseInt(nextAll[index]) == parseInt(item)).sort(function(a, b) { return a - b });
@@ -463,6 +464,37 @@ function showSpinAnalysis() {
 	});
 	patternButton += "<\/tr><\/table>";
 	//console.log(print);
+
+	//identify position moved count	
+	//console.log("posList:: "+ posList);
+
+	//Prepare and display Repeated Patterns
+	if (posList) {
+		var repatedPositions = posList.reduce(function(a, b) {
+			return a[b] ? ++a[b] : a[b] = 1, a
+		}, {});
+
+		//Sort and convert Object to Map
+		repeatMap = new Map([...new Map(Object.entries(repatedPositions)).entries()].sort((a, b) => b[1] - a[1]));
+
+		//Display repeated patterns buttons
+		var cPrint = "<table><tr>";
+		var i = -1;
+		repeatMap.forEach(function(v, k) {
+			cPrint += "<td>" +  "<font class=\"superScript\">" + v + "<\/font>" + "<font class=\"leftSuperScript\">" + planNextMove(null, k, this) + "<\/font>" + "<input type=\"button\" class=\"patternCalcButton\" index=\"" + ++i + "\" onclick=\"planNextMove(this)\" value=\"" + k + "\" \/></td>";
+			//cPrint += k + ":" + v + "&nbsp;&nbsp;";
+			if (i == 4 || i == 9) {
+				cPrint += "<\/tr><tr>";
+			}
+		});
+		cPrint += "<\/tr><\/table>";
+		$("#repeatedPatterns").html("<h5>Patterns:&nbsp;<\/h5>" + cPrint);
+		//console.log("repatedPositions::: " + cPrint);
+	}
+	
+	
+	
+	
 	if (patternButton.length > 0) {
 		$("#patternFlow").html("<h5>Style:&nbsp;<\/h5>" + patternButton);
 	} else {
