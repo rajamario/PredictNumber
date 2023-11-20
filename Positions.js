@@ -444,9 +444,9 @@ function showSpinAnalysis() {
 		//console.log("patFound:"+patFound);
 		
 		if (patFound) {
-			patternButton += "<td>" + "<font class=\"superScriptPattern\">" + patFound + "-" + ongoingSpins[spinIndex] + "<\/font>" + "<input type=\"button\" class=\"patternButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + v + "\" \/>";
+			patternButton += "<td>" + "<font class=\"superScriptPattern\">" + spinIndex + ":&nbsp;" + patFound + "-" + ongoingSpins[spinIndex] + "<\/font>" + "<input type=\"button\" class=\"patternButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + v + "\" \/>";
 		} else {
-			patternButton += "<td>" + "<font class=\"superScript\">" + ongoingSpins[spinIndex] + "<\/font>" + "<input type=\"button\" class=\"patternButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + v + "\" \/>";
+			patternButton += "<td>" + "<font class=\"superScript\">" + spinIndex + ":&nbsp;" + ongoingSpins[spinIndex] + "<\/font>" + "<input type=\"button\" class=\"patternButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + v + "\" \/>";
 		}
 		/*
 		if (index == posList.length-1) {
@@ -465,8 +465,11 @@ function showSpinAnalysis() {
 	patternButton += "<\/tr><\/table>";
 	//console.log(print);
 
-	//identify position moved count	
-	//console.log("posList:: "+ posList);
+	if (patternButton.length > 0) {
+		$("#patternFlow").html("<h5>Style:&nbsp;&nbsp;(" + posList.length + ")<\/h5>" + patternButton);
+	} else {
+		$("#patternFlow").html("Need more Spins to identify pattern....");
+	}
 
 	//Prepare and display Repeated Patterns
 	if (posList) {
@@ -490,15 +493,6 @@ function showSpinAnalysis() {
 		cPrint += "<\/tr><\/table>";
 		$("#repeatedPatterns").html("<h5>Patterns:&nbsp;<\/h5>" + cPrint);
 		//console.log("repatedPositions::: " + cPrint);
-	}
-	
-	
-	
-	
-	if (patternButton.length > 0) {
-		$("#patternFlow").html("<h5>Style:&nbsp;<\/h5>" + patternButton);
-	} else {
-		$("#patternFlow").html("Need more Spins to identify pattern....");
 	}
 
 	//Display calculated buttons
