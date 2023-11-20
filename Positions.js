@@ -457,7 +457,7 @@ function showSpinAnalysis() {
 		
 		row += 1;
 		spinIndex--;
-		if (row % 6 == 0) {
+		if (row % 4 == 0) {
 			patternButton += "<\/tr><tr>";
 		}
 		print += v + " - ";
