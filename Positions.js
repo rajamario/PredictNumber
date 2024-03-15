@@ -10,7 +10,8 @@ var nextSelected = new Array();
 var dynPatMap = new Map();
 var repeatMap = new Map();
 //d-double, h-half, s-subtract, a-addition, l-last, nm-number match, u1-up 1pos, d1-down 1pos, 1s-1st pos, d2- down 2pos, u2- up 2pos, 7-7th pos
-var dynPatterns = new Array("d","h","s","a","l","u1","d1","1s", "7p", "9p", "nm");   
+var dynPatterns = new Array("d","h","s","a","l","u1","d1","1s", "7p", "9p");
+//var dynPatterns = new Array("d","h","s","a","l","u1","d1","1s", "7p", "9p", "nm");      
 var minRepeat = 1;
 var notSeenCount = 16;
 var wins = new Array();
