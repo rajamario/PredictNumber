@@ -119,6 +119,14 @@ h5{
 }
 
 .markWon{
+	border: 2px solid #0bbfaf;
+}
+
+.markLast{
+	border: 2px solid #0bbfff;
+}
+
+.markPair{
 	border: 2px solid #0bbfff;
 }
 

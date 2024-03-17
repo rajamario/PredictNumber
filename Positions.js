@@ -16,6 +16,7 @@ var minRepeat = 1;
 var notSeenCount = 16;
 var wins = new Array();
 var possibleNumbersMap = new Map();
+var currNum = -1;
 var db = [
 	//new Array(16, 10, 28, 3, 6, 35, 16, 7, 16, 35, 25, 11, 2, 88, 30, 3, 26, 15, 12, 13, 16, 14, 34),
 	//new Array(6, 88, 19, 24, 26, 34, 2, 6, 32, 20, 31, 8, 33, 34, 29, 6, 5, 34, 19, 1, 20, 12, 30)
@@ -71,11 +72,22 @@ function showSpin() {
 			print += "greenButton";
 		}
 		
+		if (currNum != -1 && i != 0) {
+			if (currNum === parseInt(v)) {
+				print += " markLast";
+			}
+
+			if (i != 1 && parseInt(val[1]) === parseInt(v) && (currNum === val[i-1] || currNum === val[i+1])) {
+				print += " markPair";
+			}
+		}
+		
 		if(wins.indexOf(parseInt(v)) != -1){
 			print += " markWon\">";
 		} else {
 			print += "\">";
 		}
+		
 		print += v + "<\/td>"
 		if (row % 14 == 0) {
 			print += "<\/tr><tr>";
@@ -89,6 +101,7 @@ function showSpin() {
 
 function addToOngoingSpin(obj) {
 	if ($(obj).val()) {
+		currNum = parseInt($(obj).val());
 		nextAll = new Array();
 		nextSelected = new Array();
 		possibleNumbersMap = new Map();
@@ -1014,6 +1027,7 @@ function checkReload() {
 
 function undoLast() {
 	removeAddedNextAll(planNextMove(null, parseInt(posList[0]), this));
+	currNum = parseInt(ongoingSpins[ongoingSpins.length-2]); 
 	ongoingSpins.pop();
 	showSpinAnalysis();
 	planNextMove();
