@@ -10,7 +10,7 @@ var nextSelected = new Array();
 var dynPatMap = new Map();
 var repeatMap = new Map();
 //d-double, h-half, s-subtract, a-addition, l-last, nm-number match, u1-up 1pos, d1-down 1pos, 1s-1st pos, d2- down 2pos, u2- up 2pos, 7-7th pos
-var dynPatterns = new Array("d","h","s","a","l","u1","d1","1s", "7p", "9p");
+var dynPatterns = new Array("d","h","s","a","l","u1","d1","1s", "7p", "9p","pv");
 //var dynPatterns = new Array("d","h","s","a","l","u1","d1","1s", "7p", "9p", "nm");      
 var minRepeat = 1;
 var notSeenCount = 16;
@@ -286,69 +286,63 @@ function analyzeDynPattern() {
 				if (c != undefined) {
 					dynPatMap.set("l", ++c);
 				}
-			}
-			if (posList[i] - 1 ==  posList[i-1]) {
+			} else if (posList[i-2] && posList[i] == posList[i-2]) {
+				var c = parseInt(dynPatMap.get("d1"));
+				if (c != undefined) {
+					dynPatMap.set("pv", ++c);
+				}
+			} else if (posList[i] - 1 ==  posList[i-1]) {
 				var c = parseInt(dynPatMap.get("d1"));
 				if (c != undefined) {
 					dynPatMap.set("d1", ++c);
 				}
-			}
-			if (posList[i] - 2 ==  posList[i-1]) {
+			} else if (posList[i] - 2 ==  posList[i-1]) {
 				var c = parseInt(dynPatMap.get("d1"));
 				if (c != undefined) {
 					dynPatMap.set("d2", ++c);
 				}
-			}
-			if (posList[i] + 1 ==  posList[i-1]) {
+			} else if (posList[i] + 1 ==  posList[i-1]) {
 				var c = parseInt(dynPatMap.get("u1"));
 				if (c != undefined) {
 					dynPatMap.set("u1", ++c);
 				}
-			}
-			if (posList[i] + 2 ==  posList[i-1]) {
+			} else if (posList[i] + 2 ==  posList[i-1]) {
 				var c = parseInt(dynPatMap.get("u1"));
 				if (c != undefined) {
 					dynPatMap.set("u2", ++c);
 				}
-			}
-			if (posList[i] != posList[i - 1] && posList[i - 1] == 1) {
+			} else if (posList[i] != posList[i - 1] && posList[i - 1] == 1) {
 				var c = parseInt(dynPatMap.get("1s"));
 				if (c != undefined) {
 					dynPatMap.set("1s", ++c);
 				}
-			}
-			if (posList[i] != posList[i - 1] && posList[i - 1] == 7) {
+			} else if (posList[i] != posList[i - 1] && posList[i - 1] == 7) {
 				var c = parseInt(dynPatMap.get("7p"));
 				if (c != undefined) {
 					dynPatMap.set("7p", ++c);
 				}
-			}
-			if (posList[i] != posList[i - 1] && posList[i - 1] == 9) {
+			} else if (posList[i] != posList[i - 1] && posList[i - 1] == 9) {
 				var c = parseInt(dynPatMap.get("9p"));
 				if (c != undefined) {
 					dynPatMap.set("9p", ++c);
 				}
-			}
-			if (posList[i] != 0 && posList[i - 1] != 0) {
+			} else if (posList[i] != 0 && posList[i - 1] != 0) {
 				if (posList[i - 2] == posList[i - 1] - posList[i] || posList[i - 2] == posList[i] - posList[i - 1]) {
 					var c = parseInt(dynPatMap.get("s"));
 					if (c != undefined) {
 						dynPatMap.set("s", ++c);
 					}
-				}
-				if (posList[i - 2] == posList[i - 1] + posList[i]) {
+				} else if (posList[i - 2] == posList[i - 1] + posList[i]) {
 					var c = parseInt(dynPatMap.get("a"));
 					if (c != undefined) {
 						dynPatMap.set("a", ++c);
 					}
-				}
-				if (posList[i - 1] == posList[i] / 2) {
+				} else if (posList[i - 1] == posList[i] / 2) {
 					var c = parseInt(dynPatMap.get("h"));
 					if (c != undefined) {
 						dynPatMap.set("h", ++c);
 					}
-				}
-				if (posList[i - 1] == posList[i] * 2) {
+				} else if (posList[i - 1] == posList[i] * 2) {
 					var c = parseInt(dynPatMap.get("d"));
 					if (c != undefined) {
 						dynPatMap.set("d", ++c);
@@ -472,25 +466,29 @@ function showSpinAnalysis() {
 		//console.log("prev2Val:"+prev2Val);
 		//console.log("patFound:"+patFound);
 		
-		if (patFound) {
-			patternButton += "<td>" + "<font class=\"superScriptPattern\">" + spinIndex + ":&nbsp;" + patFound + "-" + ongoingSpins[spinIndex] + "<\/font>" + "<input type=\"button\" class=\"patternButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + v + "\" \/>";
-		} else {
-			patternButton += "<td>" + "<font class=\"superScript\">" + spinIndex + ":&nbsp;" + ongoingSpins[spinIndex] + "<\/font>" + "<input type=\"button\" class=\"patternButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + v + "\" \/>";
+		if(row < 24 ){
+			if (patFound) {
+				//patternButton += "<td>" + "<font class=\"superScriptPattern\">" + spinIndex + ":&nbsp;" + patFound + "-" + ongoingSpins[spinIndex] + "<\/font>" + "<input type=\"button\" class=\"patternButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + v + "\" \/>";
+				patternButton += "<td>" + "<font class=\"superScriptPattern\">" + patFound + "-" + ongoingSpins[spinIndex] + "<\/font>" + "<input type=\"button\" class=\"patternButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + v + "\" \/>";
+			} else {
+				//patternButton += "<td>" + "<font class=\"superScript\">" + spinIndex + ":&nbsp;" + ongoingSpins[spinIndex] + "<\/font>" + "<input type=\"button\" class=\"patternButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + v + "\" \/>";
+				patternButton += "<td>" + "<font class=\"superScript\">" + ongoingSpins[spinIndex] + "<\/font>" + "<input type=\"button\" class=\"patternButton\" index=\"" + index + "\" onclick=\"planNextMove(this)\" value=\"" + v + "\" \/>";
+			}
+
+			/*
+			if (index == posList.length-1) {
+				patternButton += "<font class=\"superScript\">"+ ongoingSpins[0] + "<\/font>";
+			}
+			*/
+			patternButton += "</td>";
+
+			row += 1;
+			spinIndex--;
+			if (row % 4 == 0) {
+				patternButton += "<\/tr><tr>";
+			}
+			print += v + " - ";
 		}
-		
-		/*
-		if (index == posList.length-1) {
-			patternButton += "<font class=\"superScript\">"+ ongoingSpins[0] + "<\/font>";
-		}
-		*/
-		patternButton += "</td>";
-		
-		row += 1;
-		spinIndex--;
-		if (row % 4 == 0) {
-			patternButton += "<\/tr><tr>";
-		}
-		print += v + " - ";
 	});
 	patternButton += "<\/tr><\/table>";
 	//console.log(print);
@@ -540,7 +538,7 @@ function showSpinAnalysis() {
 			disNum = s;
 			indexforCalc++;
 			var lastToLastMove = planNextMove(null, disNum, this);
-			patternCalc += "<td>" + "<font class=\"superScript\">" + "LL" + "<\/font>" + "<font class=\"leftSuperScript\">" + lastToLastMove + "<\/font>" + "<input type=\"button\" class=\"patternCalcButtonRepat\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
+			patternCalc += "<td>" + "<font class=\"superScript\">" + "pv" + "<\/font>" + "<font class=\"leftSuperScript\">" + lastToLastMove + "<\/font>" + "<input type=\"button\" class=\"patternCalcButtonRepat\" index=\"" + indexforCalc + "\" onclick=\"planNextMove(this)\" value=\"" + disNum + "\" \/></td>";
 			possibleNumbersMap.set("last", lastToLastMove);
 			addToNextAll(lastToLastMove);
 		
@@ -760,49 +758,40 @@ function triagePattern(first, second, third) {
 	var result;
 	if (first != undefined) {
 		first = parseInt(first);
-	}
-	if (first != undefined) {
-		second = parseInt(second);
-	}
-	if (first != undefined) {
-		third = parseInt(third);
+		if (second != undefined) {
+			second = parseInt(second);
+			if (third != undefined) {
+				third = parseInt(third);
+			}
+		}
 	}
 
 	if (second == first) {
 		result = "l";
-	}
-	if (second - 1 == first) {
+	} else if (first == third){
+		result = "pv";
+	} else if (second - 1 == first) {
 		result = "d1";
-	}
-	if (second - 2 == first) {
+	} else if (second - 2 == first) {
 		result = "d2";
-	}
-	if (second + 1 == first) {
+	} else if (second + 1 == first) {
 		result = "u1";
-	}
-	if (second + 2 == first) {
+	} else if (second + 2 == first) {
 		result = "u2";
-	}
-	if (second != first && first == 1) {
+	} else if (second != first && first == 1) {
 		result = "1s";
-	}
-	if (second != first && first == 7) {
+	} else if (second != first && first == 7) {
 		result = "7p";
-	}
-	if (second != first && first == 9) {
+	} else if (second != first && first == 9) {
 		result = "9p";
-	}
-	if (second != 0 && first != 0) {
+	} else if (second != 0 && first != 0) {
 		if (first == third - second || first == second - third) {
 			result = "sub";
-		}
-		if (first == second + third) {
+		} else if (first == second + third) {
 			result = "add";
-		}
-		if (first == second / 2) {
+		} else if (first == second / 2) {
 			result = "hlf";
-		}
-		if (first == second * 2) {
+		} else if (first == second * 2) {
 			result = "dbl";
 		}
 	}
