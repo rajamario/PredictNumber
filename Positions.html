@@ -11,31 +11,9 @@
 
 <body>
 	<center>
-		<div>
-			<table border="0">
-				<tr><td colspan="2" style="padding-top:20px;">
-						<div><img src="./wheel.jpg" height="220px" width:"220px" /></div>
-					</td>
-				</tr>
-				<tr><td></td></tr>
-				<tr>
-					<!--<td align="center"><input type="button" value="Clear" class="clear" onclick="checkReload()"></input></td>-->
-					<!--<td align="center">
-						<div class="flipswitch">
-							<input type="checkbox" name="flipswitch" class="flipswitch-cb" id="fs" checked="checked" />
-							<label class="flipswitch-label" for="fs">
-								<div class="flipswitch-inner"></div>
-								<div class="flipswitch-switch"></div>
-							</label>
-						</div>
-					</td>--></tr>
-			</table>
-		</div>
-		<p/><p/>
-		<hr/>
-		<div id="currSpin" style=height:10%;></div>
+		<h5>Pad</h5>
+		<div id="slots" width="100%"> </div>
 		<p />
-		
 		<div id="nextAll" style=height:10%;></div>
 		<p />
 		<!--<div id="possibleAll" style=height:10%;></div> -->
@@ -54,13 +32,33 @@
 		<div id="occurCount" style=height:10%;></div>
 		<div id="patternCount" style=height:10%;></div>
 		<p />
-		<h5>Pad</h5>
-		<div id="slots" width="100%"> </div>
+		<hr/>
+		<div id="currSpin" style=height:10%;></div>
 		<p />
 		<script type="text/javascript">
 			init();
 			window.onbeforeunload = checkReload;
 		</script>
+		<div>
+			<table border="0">
+				<tr><td colspan="2" style="padding-top:20px;">
+						<div><img src="./wheel.jpg" height="220px" width:"220px" /></div>
+					</td>
+				</tr>
+				<tr><td></td></tr>
+				<tr>
+					<td align="center"><input type="button" value="Clear" class="clear" onclick="checkReload()"></input></td>
+					<!--<td align="center">
+						<div class="flipswitch">
+							<input type="checkbox" name="flipswitch" class="flipswitch-cb" id="fs" checked="checked" />
+							<label class="flipswitch-label" for="fs">
+								<div class="flipswitch-inner"></div>
+								<div class="flipswitch-switch"></div>
+							</label>
+						</div>
+					</td>--></tr>
+			</table>
+		</div>
 		<p /><p /><p /><p /><p />
 		<!--
 		<div><h5>Repeat Count:</h5>
