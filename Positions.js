@@ -291,31 +291,6 @@ function analyzeDynPattern() {
 				if (c != undefined) {
 					dynPatMap.set("pv", ++c);
 				}
-			} else if (posList[i] - 1 ==  posList[i-1]) {
-				var c = parseInt(dynPatMap.get("d1"));
-				if (c != undefined) {
-					dynPatMap.set("d1", ++c);
-				}
-			} else if (posList[i] - 2 ==  posList[i-1]) {
-				var c = parseInt(dynPatMap.get("d1"));
-				if (c != undefined) {
-					dynPatMap.set("d2", ++c);
-				}
-			} else if (posList[i] + 1 ==  posList[i-1]) {
-				var c = parseInt(dynPatMap.get("u1"));
-				if (c != undefined) {
-					dynPatMap.set("u1", ++c);
-				}
-			} else if (posList[i] + 2 ==  posList[i-1]) {
-				var c = parseInt(dynPatMap.get("u1"));
-				if (c != undefined) {
-					dynPatMap.set("u2", ++c);
-				}
-			} else if (posList[i] != posList[i - 1] && posList[i - 1] == 1) {
-				var c = parseInt(dynPatMap.get("1s"));
-				if (c != undefined) {
-					dynPatMap.set("1s", ++c);
-				}
 			} else if (posList[i] != posList[i - 1] && posList[i - 1] == 7) {
 				var c = parseInt(dynPatMap.get("7p"));
 				if (c != undefined) {
@@ -347,15 +322,32 @@ function analyzeDynPattern() {
 					if (c != undefined) {
 						dynPatMap.set("d", ++c);
 					}
-				}
-				//TODO: To be corrected
-				/*var numMatch = confirmSequence(posList[i], posList[i - 1], posList[i - 2]);
-				if (numMatch) {
-					var c = parseInt(dynPatMap.get("nm"));
+				} else if (posList[i] - 1 == posList[i - 1]) {
+					var c = parseInt(dynPatMap.get("d1"));
 					if (c != undefined) {
-						dynPatMap.set("nm", ++c);
+						dynPatMap.set("d1", ++c);
 					}
-				}*/
+				} else if (posList[i] - 2 == posList[i - 1]) {
+					var c = parseInt(dynPatMap.get("d1"));
+					if (c != undefined) {
+						dynPatMap.set("d2", ++c);
+					}
+				} else if (posList[i] + 1 == posList[i - 1]) {
+					var c = parseInt(dynPatMap.get("u1"));
+					if (c != undefined) {
+						dynPatMap.set("u1", ++c);
+					}
+				} else if (posList[i] + 2 == posList[i - 1]) {
+					var c = parseInt(dynPatMap.get("u1"));
+					if (c != undefined) {
+						dynPatMap.set("u2", ++c);
+					}
+				} else if (posList[i] != posList[i - 1] && posList[i - 1] == 1) {
+					var c = parseInt(dynPatMap.get("1s"));
+					if (c != undefined) {
+						dynPatMap.set("1s", ++c);
+					}
+				}
 			}
 		}
 		
@@ -768,22 +760,8 @@ function triagePattern(first, second, third) {
 
 	if (second == first) {
 		result = "l";
-	} else if (first == third){
+	} else if (first == third) {
 		result = "pv";
-	} else if (second - 1 == first) {
-		result = "d1";
-	} else if (second - 2 == first) {
-		result = "d2";
-	} else if (second + 1 == first) {
-		result = "u1";
-	} else if (second + 2 == first) {
-		result = "u2";
-	} else if (second != first && first == 1) {
-		result = "1s";
-	} else if (second != first && first == 7) {
-		result = "7p";
-	} else if (second != first && first == 9) {
-		result = "9p";
 	} else if (second != 0 && first != 0) {
 		if (first == third - second || first == second - third) {
 			result = "sub";
@@ -794,6 +772,20 @@ function triagePattern(first, second, third) {
 		} else if (first == second * 2) {
 			result = "dbl";
 		}
+	} else if (second != first && first == 7) {
+		result = "7p";
+	} else if (second != first && first == 9) {
+		result = "9p";
+	} else if (second - 1 == first) {
+		result = "d1";
+	} else if (second - 2 == first) {
+		result = "d2";
+	} else if (second + 1 == first) {
+		result = "u1";
+	} else if (second + 2 == first) {
+		result = "u2";
+	} else if (second != first && first == 1) {
+		result = "1s";
 	}
 	return result;
 }
