@@ -82,6 +82,17 @@ function showSpin() {
 			}
 		}
 		
+		if(currNum != -1){
+			//Sequence Possibility
+			var matchedIndex = verifyNumSeq(val);
+			//console.log("matchedIndexes.."+ matchedIndex);
+			if (matchedIndex != [] && matchedIndex.indexOf(i) != -1) {
+				console.log("newly coming i:"+i);
+				//print += " blink";
+				print += " markSeq";
+			}
+		}
+		
 		if(wins.indexOf(parseInt(v)) != -1){
 			print += " markWon\">";
 		} else {
@@ -97,6 +108,49 @@ function showSpin() {
 	print += "<\/tr><\/table>";
 
 	$("#currSpin").html("<h5>Ongoing Spins:&nbsp;<\/h5>" + print);
+}
+
+function verifyNumSeq(ongoingNums){
+	//console.log("received:" + ongoingNums);
+	var seqFound = [];
+	if (ongoingNums.length >= 6) {
+		for (var i = 0; i < 2 && seqFound.length == 0; i++) {
+			if ((parseInt(ongoingNums[i]) - parseInt(ongoingNums[i + 1]) == 1) || (parseInt(ongoingNums[i + 1]) - parseInt(ongoingNums[i]) == 1)) {
+				//console.log("next numbers.." + currNum + "  Matching index:" + (i + 1));
+				if (seqFound.indexOf(i) == -1) { seqFound.push(i); }
+				if (seqFound.indexOf(i + 1) == -1) { seqFound.push(i + 1); }
+			}
+
+			if ((parseInt(ongoingNums[i]) - parseInt(ongoingNums[i + 2]) == 1) || (parseInt(ongoingNums[i + 2]) - parseInt(ongoingNums[i]) == 1)) {
+				if (seqFound.indexOf(i) == -1) { seqFound.push(i); }
+				if (seqFound.indexOf(i + 2) != -1) { seqFound.push(i + 2); }
+			}
+
+			if ((parseInt(ongoingNums[i]) - parseInt(ongoingNums[i + 1]) == 10) || (parseInt(ongoingNums[i + 1]) - parseInt(ongoingNums[i]) == 10) || (parseInt(ongoingNums[i]) - parseInt(ongoingNums[i + 1]) == 20) || (parseInt(ongoingNums[i + 1]) - parseInt(ongoingNums[i]) == 20) || (parseInt(ongoingNums[i]) - parseInt(ongoingNums[i + 1]) == 30) || (parseInt(ongoingNums[i + 1]) - parseInt(ongoingNums[i]) == 30)) {
+				if (seqFound.indexOf(i) == -1) { seqFound.push(i); }
+				if (seqFound.indexOf(i + 1) == -1) { seqFound.push(i + 1); }
+			}
+
+			if ((parseInt(ongoingNums[i]) - parseInt(ongoingNums[i + 2]) == 10) || (parseInt(ongoingNums[i + 2]) - parseInt(ongoingNums[i]) == 10) || (parseInt(ongoingNums[i]) - parseInt(ongoingNums[i + 2]) == 20) || (parseInt(ongoingNums[i + 2]) - parseInt(ongoingNums[i]) == 20) || (parseInt(ongoingNums[i]) - parseInt(ongoingNums[i + 2]) == 30) || (parseInt(ongoingNums[i + 2]) - parseInt(ongoingNums[i]) == 30)) {
+				if (seqFound.indexOf(i) == -1) { seqFound.push(i); }
+				if (seqFound.indexOf(i + 2) == -1) { seqFound.push(i + 2); }
+			}
+
+			if ((parseInt(ongoingNums[i]) - parseInt(ongoingNums[i + 3]) == 10) || (parseInt(ongoingNums[i + 3]) - parseInt(ongoingNums[i]) == 10) || (parseInt(ongoingNums[i]) - parseInt(ongoingNums[i + 3]) == 20) || (parseInt(ongoingNums[i + 3]) - parseInt(ongoingNums[i]) == 20) || (parseInt(ongoingNums[i]) - parseInt(ongoingNums[i + 3]) == 30) || (parseInt(ongoingNums[i + 3]) - parseInt(ongoingNums[i]) == 30)) {
+				if (seqFound.indexOf(i) == -1) { seqFound.push(i); }
+				if (seqFound.indexOf(i + 3) == -1) { seqFound.push(i + 3); }
+			}
+
+			if ((parseInt(ongoingNums[i]) - parseInt(ongoingNums[i + 4]) == 10) || (parseInt(ongoingNums[i + 4]) - parseInt(ongoingNums[i]) == 10) || (parseInt(ongoingNums[i]) - parseInt(ongoingNums[i + 4]) == 20) || (parseInt(ongoingNums[i + 4]) - parseInt(ongoingNums[i]) == 20) || (parseInt(ongoingNums[i]) - parseInt(ongoingNums[i + 4]) == 30) || (parseInt(ongoingNums[i + 4]) - parseInt(ongoingNums[i]) == 30)) {
+				if (seqFound.indexOf(i) == -1) { seqFound.push(i); }
+				if (seqFound.indexOf(i + 4) == -1) { seqFound.push(i + 4); }
+			}
+
+			//console.log("i:" + i + " Num:" + ongoingNums[i] + " :::  " + currNum);
+		}
+
+	}
+	return seqFound;
 }
 
 function addToOngoingSpin(obj) {

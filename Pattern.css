@@ -15,6 +15,10 @@ h5{
 	margin-bottom: 5px;
 }
 
+@keyframes blink { 
+   50% { background-color: orange; } 
+}
+
 .redButton{
 	background: #aa381e;
 	box-shadow: #aa381e 0 2px 2px -5px;
@@ -45,6 +49,10 @@ h5{
 	border:1px solid #c4c3d0;
 	width:30px;
 }
+
+.blink {
+	animation: blink 1s linear infinite;
+}	
 
 .patternCalcButton{
 	background-color: #d3d3d3;
@@ -128,6 +136,10 @@ h5{
 
 .markPair{
 	border: 2px solid #0bbfff;
+}
+
+.markSeq{
+	border: 3px solid #ff7f27;
 }
 
 .confirmSeq{
