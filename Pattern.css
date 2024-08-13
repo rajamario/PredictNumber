@@ -138,8 +138,12 @@ h5{
 	border: 2px solid #0bbfff;
 }
 
-.markSeq{
-	border: 3px solid #ff7f27;
+.markSeq1{
+	border: 2px solid #ff7f27;
+}
+
+.markSeq10{
+	border: 2px solid #0bbfaf;
 }
 
 .confirmSeq{
