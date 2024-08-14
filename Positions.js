@@ -84,7 +84,7 @@ function showSpin() {
 		
 		if(currNum != -1){
 			//Sequence Possibility
-			var matchedIndex = verifyNumSeq(val,1, 2);
+			var matchedIndex = verifyNumSeq(val,1, 3);
 			//console.log("matchedIndexes.."+ matchedIndex);
 			if (matchedIndex != [] && matchedIndex.indexOf(i) != -1) {
 				//console.log("1 Num Seq:: i:"+i);
@@ -92,7 +92,7 @@ function showSpin() {
 				print += " markSeq1";
 			}
 			
-			matchedIndex = verifyNumSeq(val, 10, 4);
+			matchedIndex = verifyNumSeq(val, 10, 6);
 			//console.log("matchedIndexes.."+ matchedIndex);
 			if (matchedIndex != [] && matchedIndex.indexOf(i) != -1) {
 				//console.log("10 num Seq:: i:"+i);
@@ -123,7 +123,7 @@ function showSpin() {
 function verifyNumSeq(ongoingNums, nthSeq, lpCount){
 	//console.log("received:" + ongoingNums);
 	var seqFound = [];
-	if (ongoingNums.length >= 6) {
+	if (ongoingNums.length >= 9) {
 		for (var i = 0; i < 3; i++) {
 			if (nthSeq == 1) {
 				for (var j = 1; j <= lpCount; j++) {
