@@ -126,6 +126,10 @@ h5{
 	border: 2px solid #fcff82;
 }
 
+.prevSeq{
+	border: 2px solid #aaff82;
+}
+
 .markWon{
 	border: 2px solid #0bbfaf;
 }

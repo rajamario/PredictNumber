@@ -472,6 +472,13 @@ function getSpecialSequence() {
 			}
 		});
 	});
+	
+	//Check Prev Sequence
+	if (lastMove != undefined) {
+		if ((posList[2] == lastMove) || (posList[2] - lastMove == 1) || (lastMove - posList[2] == 1)) {
+			$('.patternButton[index=1]').addClass('prevSeq');
+		} 
+	}
 }
 
 function showSpinAnalysis() {
