@@ -16,6 +16,7 @@ var minRepeat = 1;
 var notSeenCount = 16;
 var wins = new Array();
 var possibleNumbersMap = new Map();
+var nextHistoryMap = new Map();
 var currNum = -1;
 var db = [
 	//new Array(16, 10, 28, 3, 6, 35, 16, 7, 16, 35, 25, 11, 2, 88, 30, 3, 26, 15, 12, 13, 16, 14, 34),
@@ -151,6 +152,37 @@ function verifyNumSeq(ongoingNums, nthSeq, lpCount){
 	return seqFound;
 }
 
+function collectNextHistory(currentNum, isUndo, prevNum){
+	var val = [];
+	ongoingSpins.forEach(function(v) {
+		val.push(v);
+	});
+	
+	if (nextHistoryMap && ongoingSpins.length >= 2) {
+		if (isUndo) {
+			var innerMap = nextHistoryMap.get(ongoingSpins[ongoingSpins.length - 2]);
+			if (innerMap.get(currentNum) >= 0) {
+				innerMap.set(currentNum, innerMap.get(currentNum) - 1);
+				currentNum = ongoingSpins[ongoingSpins.length-2];
+			}
+		} else {
+			var innerMap = nextHistoryMap.get(ongoingSpins[ongoingSpins.length - 2]);
+			innerMap.set(currentNum, innerMap.get(currentNum) + 1);
+		}
+		//nextHistoryMap.set(ongoingSpins[ongoingSpins.length - 2], nextHistoryMap.get(ongoingSpins[ongoingSpins.length - 2]).get(currentNum) + 1);
+	}
+	
+	var cHisPrint = "<font class=\"footNoteAfterCount\">";
+	var sMap = new Map([...nextHistoryMap.get(currentNum).entries()].sort((a, b) => b[1] - a[1]));
+	sMap.forEach(function(v, k) {
+		if (v != 0) {
+			cHisPrint += k + ":" + v + "&nbsp;&nbsp;";
+		}
+	});
+	cHisPrint += "<\/font>";
+	$("#patternAfterHistory").html(cHisPrint);
+}
+
 function addToOngoingSpin(obj) {
 	if ($(obj).val()) {
 		currNum = parseInt($(obj).val());
@@ -166,6 +198,7 @@ function addToOngoingSpin(obj) {
 		planNextMove();
 		getSpecialSequence();
 		analyzeDynPattern();
+		collectNextHistory(parseInt($(obj).val()));
 	}
 }
 
@@ -413,9 +446,18 @@ function analyzeDynPattern() {
 			cPrint += k + ":" + v + "&nbsp;&nbsp;";
 		});
 		cPrint += "<\/font>";
-		$("#patternCount").html(cPrint);
+		//Commenting. Because not using this much... 
+		//$("#patternCount").html(cPrint);
 		//console.log("dynPattens:");
 		//console.log(dynPatMap);
+		
+		var cPrint = "<font class=\"footNote\"><table><tr><td><img src=\"greentick.png\" height=\"10px\" width=\"10px\"/>negi</td>";
+		cPrint += "<td><img src=\"greentick.png\" height=\"10px\" width=\"10px\"/>10th</td>";
+		cPrint += "<td><img src=\"greentick.png\" height=\"10px\" width=\"10px\"/>sub+n</td>";
+		cPrint += "<td><img src=\"greentick.png\" height=\"10px\" width=\"10px\"/>sum+n</td>";
+		cPrint += "</tr></table><\/font>";
+		$("#coverPattern").html(cPrint);
+		
 		
 		//Count occurrance of Numbers 
 		var occrMap = ongoingSpins.reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
@@ -501,7 +543,7 @@ function showSpinAnalysis() {
 
 	saveSequence();
 
-	var patternButton = "<table><tr>";
+	var patternButton = "<div id=\"patternTable\"><table><tr>";
 	var row = 0;
 	var index = -1;
 	var spinIndex = ongoingSpins.length - 1 || -1;
@@ -541,11 +583,11 @@ function showSpinAnalysis() {
 			print += v + " - ";
 		}
 	});
-	patternButton += "<\/tr><\/table>";
+	patternButton += "<\/tr><\/table></div>";
 	//console.log(print);
 
 	if (patternButton.length > 0) {
-		$("#patternFlow").html("<h5>Style:&nbsp;&nbsp;(" + posList.length + ")<\/h5>" + patternButton);
+		$("#patternFlow").html("<div onClick=togglePatternTable()><h5>Style:&nbsp;&nbsp;(" + posList.length + ")<\/h5></div>" + patternButton);
 	} else {
 		$("#patternFlow").html("Need more Spins to identify pattern....");
 	}
@@ -1003,6 +1045,14 @@ function initMap() {
 		}
 		seqMap.set(v, m);
 	});
+	
+	for (var i = 0; i < 37; i++) {
+		var innerMap = new Map();
+		for (var j = 0; j < 37; j++) {
+			innerMap.set(j, 0);
+		}
+		nextHistoryMap.set(i, innerMap);
+	}
 }
 
 function formRollingSequence(startNum) {
@@ -1068,9 +1118,34 @@ function checkReload() {
 function undoLast() {
 	removeAddedNextAll(planNextMove(null, parseInt(posList[0]), this));
 	currNum = parseInt(ongoingSpins[ongoingSpins.length-2]); 
+	collectNextHistory(ongoingSpins[ongoingSpins.length-1], true, parseInt(ongoingSpins[ongoingSpins.length-1]));
 	ongoingSpins.pop();
 	showSpinAnalysis();
 	planNextMove();
 	$(".undo").hide();
 	getSpecialSequence();
+}
+
+function togglePatternTable() {
+	$("#patternTable").toggle();
+}
+
+function showAfter(){
+	$("#afterCounts").toggle();
+	var cHisPrint = "<font class=\"footNote\"><br/>";
+	nextHistoryMap.forEach(function(v1, k1) {
+		var cHisPrintIn = ""; 
+		var inMap = nextHistoryMap.get(k1);
+		var sMap = new Map([...inMap.entries()].sort((a, b) => b[1] - a[1]));
+		sMap.forEach(function(v, k) {
+			if (v != 0) {
+				cHisPrintIn += k + ":" + v + "&nbsp;&nbsp;";
+			}
+		});
+		if (cHisPrintIn.length > 0) {
+			cHisPrint += k1 + " -> " + cHisPrintIn + "<br/>";
+		}
+	});
+		cHisPrint += "<\/font>";
+	$("#afterCounts").html(cHisPrint);
 }

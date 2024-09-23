@@ -19,8 +19,10 @@
 		<div id="next" style=height:10%;></div>
 		<p />
 		<div id="patternCalc" style=height:10%;></div>
-		<br />
-		<div id="patternCount" style=height:10%;></div>
+		<div id="patternAfterHistory" style=height:10%;></div>
+		<!-- Not using this much -->
+		<!--<div id="patternCount" style=height:10%;></div>-->
+		<div id="coverPattern" style=height:10%;></div>
 		<div id="occurCount" style=height:10%;></div>
 		<!--<div id="possibleAll" style=height:10%;></div> -->
 		<div id="repeatedPatterns" style=height:10%;></div>
@@ -47,6 +49,7 @@
 				<tr><td></td></tr>
 				<tr>
 					<td align="center"><input type="button" value="Clear" class="clear" onclick="checkReload()"></input></td>
+					<td align="center"><input type="button" value="After" class="clear" onclick="showAfter()"></input></td>
 					<!--<td align="center">
 						<div class="flipswitch">
 							<input type="checkbox" name="flipswitch" class="flipswitch-cb" id="fs" checked="checked" />
@@ -58,7 +61,9 @@
 					</td>--></tr>
 			</table>
 		</div>
-		<p /><p /><p /><p /><p />
+		<p /><p />
+		<div id="afterCounts" style=height:10%;></div>
+		<p /><p /><p />
 		<!--
 		<div><h5>Repeat Count:</h5>
 		<select id="repeatCount">
